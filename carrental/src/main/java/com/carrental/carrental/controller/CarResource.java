@@ -1,4 +1,4 @@
-package com.carrental.carrental;
+package com.carrental.carrental.controller;
 
 import com.carrental.carrental.model.Car;
 import com.carrental.carrental.service.CarService;
