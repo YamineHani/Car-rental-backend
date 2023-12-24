@@ -1,4 +1,4 @@
-package com.carrental.carrental;
+package com.carrental.carrental.controller;
 
 import com.carrental.carrental.model.Car;
 import com.carrental.carrental.service.CarService;
@@ -25,10 +25,28 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     }
 
     //api/car/find/500
-    @GetMapping("/find/{plateId}")
+    @GetMapping("/find/plate/{plateId}")
     public ResponseEntity<Car> getCarByPlateId(@PathVariable("plateId") Long plateId){
         Car car = carService.findCarByPlateId(plateId);
         return new ResponseEntity<>(car, HttpStatus.OK);
+    }
+
+    @GetMapping("/find/brand/{brand}")
+    public ResponseEntity<List<Car>> getCarsByBrand(@PathVariable("brand") String brand){
+        List<Car> cars = carService.findCarsByBrand(brand);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
+    @GetMapping("/find/color/{color}")
+    public ResponseEntity<List<Car>> getCarsByColor(@PathVariable("brand") String color){
+        List<Car> cars = carService.findCarsByColor(color);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
+    @GetMapping("/find/year/{year}")
+    public ResponseEntity<List<Car>> getCarByYear(@PathVariable("year") Integer year){
+        List<Car> cars = carService.findCarsByYear(year);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
     @PostMapping("/add")
