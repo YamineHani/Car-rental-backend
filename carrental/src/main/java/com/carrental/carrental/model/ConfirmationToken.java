@@ -1,6 +1,5 @@
 package com.carrental.carrental.model;
 
-import com.carrental.carrental.model.AppUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,13 +35,13 @@ public class ConfirmationToken {
             nullable = false,                         // the database that
             name = "app_user_id"      // is used to establish the association between the
     )                                // ConfirmationToken and AppUser entities.
-    private AppUser appUser;
+    private User user;
 
     public ConfirmationToken(String token, LocalDateTime createdAt,
-                             LocalDateTime expiresAt,  AppUser appUser) {
+                             LocalDateTime expiresAt,  User user) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.appUser = appUser;
+        this.user = user;
     }
 }

@@ -14,7 +14,7 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-public class AppUser implements UserDetails{
+public class User implements UserDetails{
     @Id
     @SequenceGenerator( // used to generate unique identifiers for the id field in appUser class
             name = "appUser_sequence",
@@ -31,23 +31,23 @@ public class AppUser implements UserDetails{
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    private UserRole userRole;
     private Boolean locked = false;
     private Boolean enabled = false; // will be enabled once user confirms email and account becomes active
 
     //constructor without id because id is auto-generated
-    public AppUser(String firstName, String lastName,
-                   String email, String password, AppUserRole appUserRole) {
+    public User(String firstName, String lastName,
+                String email, String password, UserRole userRole) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.appUserRole = appUserRole;
+        this.userRole = userRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
     }
 
