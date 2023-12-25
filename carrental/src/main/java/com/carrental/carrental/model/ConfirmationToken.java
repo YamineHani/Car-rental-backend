@@ -1,4 +1,4 @@
-package com.carrental.carrental.token;
+package com.carrental.carrental.model;
 
 import com.carrental.carrental.model.AppUser;
 import jakarta.persistence.*;
@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
 public class ConfirmationToken {
     @Id
     @SequenceGenerator( // used to generate unique identifiers for the id field in appUser class
@@ -38,11 +39,10 @@ public class ConfirmationToken {
     private AppUser appUser;
 
     public ConfirmationToken(String token, LocalDateTime createdAt,
-                             LocalDateTime expiresAt, LocalDateTime confirmedAt, AppUser appUser) {
+                             LocalDateTime expiresAt,  AppUser appUser) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.confirmedAt = confirmedAt;
         this.appUser = appUser;
     }
 }

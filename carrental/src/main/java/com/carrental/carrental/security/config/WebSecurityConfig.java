@@ -45,7 +45,7 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/v*/registration/**").permitAll()
                                 .anyRequest().authenticated()
                 );
-
+        // TODO MAKE SURE LOGIN WORKS LIKE THIS THEN ADD LOGOUT
         return http.build();
     }
 }
