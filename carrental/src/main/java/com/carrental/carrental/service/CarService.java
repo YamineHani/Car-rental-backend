@@ -5,10 +5,9 @@ import com.carrental.carrental.model.Car;
 import com.carrental.carrental.repo.CarRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
 
 @Service
 public class CarService {
@@ -20,8 +19,14 @@ public class CarService {
     }
 
     public Car addCar(Car car){
-        car.setBrand(UUID.randomUUID().toString());
-        return carRepo.save(car);
+        if(carRepo.existsById(car.getPlateId()) == false)
+        {
+            return carRepo.save(car);
+        }
+        else
+        {
+            return findCarByPlateId(car.getPlateId());
+        }
     }
 
     public List<Car> findAllCars(){
@@ -29,15 +34,35 @@ public class CarService {
     }
 
     public Car updateCar(Car car){
-        return carRepo.save(car);
+        if(carRepo.existsById(car.getPlateId()) == true)
+        {
+            return carRepo.save(car);
+        }
+        else
+        {
+            return findCarByPlateId(car.getPlateId());
+        }
     }
 
+    @Transactional
     public void deleteCar(Long plateId){
         carRepo.deleteCarByPlateId(plateId);
     }
 
     public Car findCarByPlateId(Long plateId){
         return carRepo.findCarByPlateId(plateId)
-                .orElseThrow(() -> new UserNotFoundException("car by id "+ plateId + "was not found"));
+                .orElseThrow(() -> new UserNotFoundException("Car by id "+ plateId + " was not found"));
+    }
+    public List<Car> findCarsByBrand(String brand) {
+        return carRepo.findCarsByBrand(brand)
+                .orElseThrow(() -> new UserNotFoundException("Cars of brand "+ brand + " was not found"));
+    }
+    public List<Car> findCarsByColor(String color) {
+        return carRepo.findCarsByColor(color)
+                .orElseThrow(() -> new UserNotFoundException("Cars of "+ color + " color was not found"));
+    }
+    public List<Car> findCarsByYear(Integer year) {
+        return carRepo.findCarsByYear(year)
+                .orElseThrow(() -> new UserNotFoundException("Cars of year "+ year + " was not found"));
     }
 }
