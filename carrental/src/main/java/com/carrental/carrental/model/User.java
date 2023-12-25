@@ -14,7 +14,7 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-public class User implements UserDetails{
+public class User implements UserDetails {
     @Id
     @SequenceGenerator( // used to generate unique identifiers for the id field in appUser class
             name = "appUser_sequence",
