@@ -1,8 +1,11 @@
 package com.carrental.carrental.controller;
 
+import com.carrental.carrental.model.LoginRequest;
 import com.carrental.carrental.model.RegistrationRequest;
+import com.carrental.carrental.model.User;
 import com.carrental.carrental.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,5 +25,10 @@ public class UserController {
     @GetMapping(path = "confirm")
     public ResponseEntity<String> confirm(@RequestParam("token") String token) {
         return userService.confirmToken(token);
+    }
+
+    @PostMapping(path = "login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request){
+        return  userService.login(request);
     }
 }

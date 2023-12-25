@@ -24,4 +24,8 @@ public class ConfirmationTokenService {
         return confirmationTokenRepo.updateConfirmedAt(
                 token, LocalDateTime.now());
     }
+
+    public Optional<ConfirmationToken> deleteToken(long id) {
+        return confirmationTokenRepo.deleteTokenByUserId(id);
+    }
 }

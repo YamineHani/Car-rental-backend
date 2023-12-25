@@ -33,7 +33,7 @@ public class ConfirmationToken {
     @ManyToOne //one appUser can have many confirmation token
     @JoinColumn(                     // Specifies the details of the foreign key column in
             nullable = false,                         // the database that
-            name = "app_user_id"      // is used to establish the association between the
+            name = "userId"      // is used to establish the association between the
     )                                // ConfirmationToken and AppUser entities.
     private User user;
 

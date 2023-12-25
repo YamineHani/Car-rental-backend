@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,8 @@ public class UserService implements UserDetailsService {
     private final EmailValidatorService emailValidatorService;
     private final EmailService emailService;
 
+    private final String CONFIRM_TOKEN_URL = "http://localhost:8080/api/v1/user/confirm?token=";
+
     public ResponseEntity<String> register(RegistrationRequest request) {
         boolean isValidEmail = emailValidatorService.test(request.getEmail()); //validate request email
         if(!isValidEmail) {
@@ -34,7 +37,7 @@ public class UserService implements UserDetailsService {
                 request.getLastName(), request.getEmail(), request.getPassword(), UserRole.USER));
         if(responseEntity.getStatusCode().isSameCodeAs(HttpStatus.CREATED)){
             String token = responseEntity.getBody();
-            String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+            String link = CONFIRM_TOKEN_URL + token;
             emailService.send(request.getEmail(), emailService.buildEmail(request.getFirstName(), link));
             return new ResponseEntity<>(token,HttpStatus.OK);
         }
@@ -92,7 +95,38 @@ public class UserService implements UserDetailsService {
         return new ResponseEntity<>(token, HttpStatus.CREATED); //change this
     }
 
-    public int enableAppUser(String email) {
-        return userRepo.enableUser(email);
+    public void enableAppUser(String email) {
+        userRepo.enableUser(email);
+    }
+
+    public ResponseEntity<?> login(LoginRequest request){
+        Optional<User> userOptional = userRepo.findByEmail(request.getEmail());
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            if(user.isEnabled()){
+                if(bCryptPasswordEncoder.matches(request.getPassword(),user.getPassword())){
+                    return new ResponseEntity<>(user,HttpStatus.OK);
+                }
+                else{
+                    return new ResponseEntity<>("Wrong password",HttpStatus.UNAUTHORIZED);
+                }
+            }
+            else {
+                confirmationTokenService.deleteToken(user.getId());
+                String token = UUID.randomUUID().toString();
+                ConfirmationToken confirmationToken = new ConfirmationToken(
+                        token, LocalDateTime.now(),LocalDateTime.now().plusMinutes(15), user
+                );
+                confirmationTokenService.saveConfirmationToken(confirmationToken);
+                String link = CONFIRM_TOKEN_URL + token;
+                emailService.send(user.getEmail(), emailService.buildEmail(user.getFirstName(), link));
+                return new ResponseEntity<>("Email not confirmed, a confirmation mail has been resent",HttpStatus.UNAUTHORIZED);
+            }
+
+        }
+        else{
+            // email doesn't exist
+            return new ResponseEntity<>("Email doesn't exist, register now!",HttpStatus.UNAUTHORIZED);
+        }
     }
 }
