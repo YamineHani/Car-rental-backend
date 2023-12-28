@@ -41,11 +41,9 @@ public class Car implements Serializable {
     private String imageUrl;
 
     @OneToMany(mappedBy = "car")
-    @JsonBackReference
     private List<Reservation> reservations = new ArrayList<Reservation>();
     @ManyToOne()
     @JoinColumn(name = "officeId", nullable = false)
-    @JsonBackReference
     private Office office;
 
     public Car(long plateId, String brand, String type, Integer year, CarStatus status, Float rate, String transmissionType, String fuelType, String bodyStyle, String color, Integer capacity, String imageUrl, Office office) {
