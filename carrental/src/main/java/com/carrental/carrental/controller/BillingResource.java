@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("api/v1/billing")
 @CrossOrigin("*")
@@ -36,12 +34,12 @@ public class BillingResource {
 
     @GetMapping("/find/reservation/{reservationId}")
     public ResponseEntity<?> getBillingByReservationId(@PathVariable("reservationId") Integer reservationId) {
-        if(reservationService.findReservationByReservationId(reservationId).getStatusCode() == HttpStatus.FOUND)
+        if(reservationService.findReservationByReservationId(reservationId).getStatusCode() == HttpStatus.OK)
         {
             Reservation reservation = (Reservation)reservationService.findReservationByReservationId(reservationId).getBody();
             return billingService.findBillingByReservation(reservation);
         }
-        return new ResponseEntity<>("No reservation with id " + reservationId, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No reservation with id " + reservationId, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/find/method/{method}")
@@ -57,7 +55,7 @@ public class BillingResource {
     //todo messaging repeated reservation ids
     @PostMapping("/add")
     public ResponseEntity<?> addBilling(@RequestBody Billing billing){
-        if(reservationService.findReservationByReservationId(billing.getReservationId()).getStatusCode() == HttpStatus.FOUND)
+        if(reservationService.findReservationByReservationId(billing.getReservationId()).getStatusCode() == HttpStatus.OK)
         {
             /*Optional<Reservation> reservationFound = (Optional<Reservation>)reservationService.findReservationByReservationId(billing.getReservationId()).getBody();
             Optional<Billing> billingFound = (Optional<Billing>)billingService.findBillingByReservation(reservationFound.get()).getBody();
@@ -72,16 +70,16 @@ public class BillingResource {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateBilling(@RequestBody Billing billing){
-        if(billingService.findBillingByBillingId(billing.getBillingId()).getStatusCode() == HttpStatus.FOUND)
+        if(billingService.findBillingByBillingId(billing.getBillingId()).getStatusCode() == HttpStatus.OK)
         {
             return billingService.updateBilling(billing);
         }
-        return new ResponseEntity<>("No billing of id " + billing.getBillingId() + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No billing of id " + billing.getBillingId() + " was found", HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/delete/{billingId}")
     public ResponseEntity<?> deleteBilling(@PathVariable("billingId") Integer billingId){
         billingService.deleteBilling(billingId);
-        return new ResponseEntity<>("Deleted successfully",HttpStatus.OK);
+        return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
     }
 }

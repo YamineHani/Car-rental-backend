@@ -39,9 +39,9 @@ public class BillingService {
         List<Billing> billings = billingRepo.findAll();
         if(billings.isEmpty())
         {
-            return new ResponseEntity<>("No billings currently existing", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No billings currently existing", HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(billings, HttpStatus.FOUND);
+        return new ResponseEntity<>(billings, HttpStatus.OK);
     }
 
     //todo handling updating description
@@ -75,35 +75,35 @@ public class BillingService {
         Optional<Billing> billing = billingRepo.findBillingByBillingId(billingId);
         if(billing.isPresent())
         {
-            return new ResponseEntity<>(billing, HttpStatus.FOUND);
+            return new ResponseEntity<>(billing, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No billing with id " + billingId, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No billing with id " + billingId, HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findBillingByReservation(Reservation reservation) {
         Optional<Billing> billing = billingRepo.findBillingByReservation(reservation);
         if(billing.isPresent())
         {
-            return new ResponseEntity<>(billing, HttpStatus.FOUND);
+            return new ResponseEntity<>(billing, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No billing for reservation of id " + reservation.getReservationId(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No billing for reservation of id " + reservation.getReservationId(), HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findBillingsByMethod(Method method) {
         Optional<List<Billing>> billings = billingRepo.findBillingsByMethod(method);
         if(billings.isPresent())
         {
-            return new ResponseEntity<>(billings, HttpStatus.FOUND);
+            return new ResponseEntity<>(billings, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No billing with " + method.getDisplayName() + " payment method was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No billing with " + method.getDisplayName() + " payment method was found", HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findBillingsByStatus(BillingStatus status) {
         Optional<List<Billing>> billings = billingRepo.findBillingsByStatus(status);
         if(billings.isPresent())
         {
-            return new ResponseEntity<>(billings, HttpStatus.FOUND);
+            return new ResponseEntity<>(billings, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No billing with " + status.getDisplayName() + " status was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No billing with " + status.getDisplayName() + " status was found", HttpStatus.NO_CONTENT);
     }
 }

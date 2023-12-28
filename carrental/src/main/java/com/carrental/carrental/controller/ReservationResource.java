@@ -1,6 +1,5 @@
 package com.carrental.carrental.controller;
 
-import com.carrental.carrental.model.Billing;
 import com.carrental.carrental.model.Car;
 import com.carrental.carrental.model.Reservation;
 import com.carrental.carrental.model.enums.CarStatus;
@@ -45,7 +44,7 @@ public class ReservationResource {
 
     @GetMapping("/find/car/{plateId}")
     public ResponseEntity<?> getReservationsByPlateId(@PathVariable("plateId") Long plateId) {
-        if(carService.findCarByPlateId(plateId).getStatusCode() == HttpStatus.FOUND)
+        if(carService.findCarByPlateId(plateId).getStatusCode() == HttpStatus.OK)
         {
             Optional<Car> car = (Optional<Car>)carService.findCarByPlateId(plateId).getBody();
             if(car.isPresent())
@@ -64,7 +63,7 @@ public class ReservationResource {
 
     @PostMapping("/add")
     public ResponseEntity<?> addReservation(@RequestBody Reservation reservation) {
-        if(carService.findCarByPlateId(reservation.getPlateId()).getStatusCode() == HttpStatus.FOUND)
+        if(carService.findCarByPlateId(reservation.getPlateId()).getStatusCode() == HttpStatus.OK)
         {
             Optional<Car> car = (Optional<Car>)carService.findCarByPlateId(reservation.getPlateId()).getBody();
             if(car.get().getStatus() == CarStatus.ACTIVE)
@@ -74,15 +73,15 @@ public class ReservationResource {
             }
             return new ResponseEntity<>("Car selected is unavailable for now", HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>("No car with plate id " + reservation.getPlateId() + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No car with plate id " + reservation.getPlateId() + " was found", HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateReservation(@RequestBody Reservation reservation) {
-        if(reservationService.findReservationByReservationId(reservation.getReservationId()).getStatusCode() == HttpStatus.FOUND)
+        if(reservationService.findReservationByReservationId(reservation.getReservationId()).getStatusCode() == HttpStatus.OK)
         {
             Optional<Reservation> reservationFound = (Optional<Reservation>)reservationService.findReservationByReservationId(reservation.getReservationId()).getBody();
-            if(carService.findCarByPlateId(reservation.getPlateId()).getStatusCode() == HttpStatus.FOUND)
+            if(carService.findCarByPlateId(reservation.getPlateId()).getStatusCode() == HttpStatus.OK)
             {
                 if(reservationFound.get().getPlateId().equals(reservation.getPlateId()))
                 {
@@ -105,9 +104,9 @@ public class ReservationResource {
                 }
                 return new ResponseEntity<>("Car selected is unavailable for now", HttpStatus.CONFLICT);
             }
-            return new ResponseEntity<>("No car with plate id " + reservation.getPlateId() + " was found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No car with plate id " + reservation.getPlateId() + " was found", HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>("No reservation with id " + reservation.getReservationId() + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No reservation with id " + reservation.getReservationId() + " was found", HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("delete/{reservationId}")

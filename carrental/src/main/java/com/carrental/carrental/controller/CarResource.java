@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/car")
@@ -86,10 +87,10 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
 
     @GetMapping("/find/office/{officeId}")
     public ResponseEntity<?> getCarsByOfficeId(@PathVariable("officeId") Integer officeId){
-        if(officeService.findOfficeByOfficeId(officeId).getStatusCode() == HttpStatus.FOUND)
+        if(officeService.findOfficeByOfficeId(officeId).getStatusCode() == HttpStatus.OK)
         {
-            Office office = (Office)officeService.findOfficeByOfficeId(officeId).getBody();
-            return carService.findCarsByOffice(office);
+            Optional<Office> office = (Optional<Office>)officeService.findOfficeByOfficeId(officeId).getBody();
+            return carService.findCarsByOffice(office.get());
         }
         return new ResponseEntity<>("No office with id " + officeId, HttpStatus.NO_CONTENT);
     }
@@ -107,7 +108,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     @DeleteMapping("/delete/{plateId}")
     public ResponseEntity<?> deleteCar(@PathVariable("plateId") Long plateId){
         carService.deleteCar(plateId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
     }
 
 

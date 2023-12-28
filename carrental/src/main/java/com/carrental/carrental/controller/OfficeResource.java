@@ -61,6 +61,6 @@ public class OfficeResource {
     @DeleteMapping("/delete/{officeId}")
     public ResponseEntity<?> deleteOffice(@PathVariable("officeId") Integer officeId) {
         officeService.deleteOffice(officeId);
-        return new ResponseEntity<>(HttpStatus.valueOf("Deleted successfully."));
+        return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
     }
 }

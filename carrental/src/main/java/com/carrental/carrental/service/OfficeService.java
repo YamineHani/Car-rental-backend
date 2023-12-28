@@ -34,9 +34,9 @@ public class OfficeService {
         List<Office> offices = officeRepo.findAll();
         if(offices.isEmpty())
         {
-            return new ResponseEntity<>("No offices currently exist", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No offices currently exist", HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(offices, HttpStatus.FOUND);
+        return new ResponseEntity<>(offices, HttpStatus.OK);
     }
 
     public ResponseEntity<?> updateOffice(Office office) {
@@ -57,35 +57,35 @@ public class OfficeService {
         Optional<Office> office = officeRepo.findOfficeByOfficeId(officeId);
         if(office.isPresent())
         {
-            return new ResponseEntity<>(office, HttpStatus.FOUND);
+            return new ResponseEntity<>(office, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No office with id " + officeId + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No office with id " + officeId + " was found", HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findOfficesByCountry(String country) {
         Optional<List<Office>> offices = officeRepo.findOfficesByCountry(country);
         if(offices.isPresent())
         {
-            return new ResponseEntity<>(offices, HttpStatus.FOUND);
+            return new ResponseEntity<>(offices, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No office in " + country + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No office in " + country + " was found", HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findOfficesByCity(String city) {
         Optional<List<Office>> offices = officeRepo.findOfficesByCity(city);
         if(offices.isPresent())
         {
-            return new ResponseEntity<>(offices, HttpStatus.FOUND);
+            return new ResponseEntity<>(offices, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No office in " + city + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No office in " + city + " was found", HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findOfficesByBranch(Branch branch) {
         Optional<List<Office>> offices = officeRepo.findOfficesByBranch(branch);
         if(offices.isPresent())
         {
-            return new ResponseEntity<>(offices, HttpStatus.FOUND);
+            return new ResponseEntity<>(offices, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No office in " + branch.getDisplayName() + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No office in " + branch.getDisplayName() + " was found", HttpStatus.NO_CONTENT);
     }
 }
