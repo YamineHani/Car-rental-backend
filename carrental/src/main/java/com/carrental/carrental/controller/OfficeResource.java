@@ -1,6 +1,8 @@
 package com.carrental.carrental.controller;
 
+import com.carrental.carrental.model.Car;
 import com.carrental.carrental.model.Office;
+import com.carrental.carrental.model.enums.Branch;
 import com.carrental.carrental.service.OfficeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/office")
+@CrossOrigin("*")
 public class OfficeResource {
     private final OfficeService officeService;
 
@@ -18,44 +21,49 @@ public class OfficeResource {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Office>> getAllOffices() {
-        List<Office> offices = officeService.findAllOffices();
-        return new ResponseEntity<>(offices, HttpStatus.OK);
+    public ResponseEntity<?> getAllOffices() {
+        return officeService.findAllOffices();
     }
 
     @GetMapping("/find/id/{officeId}")
-    public ResponseEntity<Office> getOfficeByOfficeId(@PathVariable("officeId") Integer officeId) {
-        Office office = officeService.findOfficeByOfficeId(officeId);
-        return new ResponseEntity<>(office, HttpStatus.OK);
+    public ResponseEntity<?> getOfficeByOfficeId(@PathVariable("officeId") Integer officeId) {
+        return officeService.findOfficeByOfficeId(officeId);
     }
 
     @GetMapping("/find/country/{country}")
-    public ResponseEntity<List<Office>> getOfficesByCountry(@PathVariable("country") String country) {
-        List<Office> offices = officeService.findOfficesByCountry(country);
-        return new ResponseEntity<>(offices, HttpStatus.OK);
+    public ResponseEntity<?> getOfficesByCountry(@PathVariable("country") String country) {
+        return officeService.findOfficesByCountry(country);
     }
 
     @GetMapping("/find/city/{city}")
-    public ResponseEntity<List<Office>> getOfficesByCity(@PathVariable("city") String city) {
-        List<Office> offices = officeService.findOfficesByCity(city);
-        return new ResponseEntity<>(offices, HttpStatus.OK);
+    public ResponseEntity<?> getOfficesByCity(@PathVariable("city") String city) {
+        return officeService.findOfficesByCity(city);
     }
 
+    @GetMapping("/find/branch/{branch}")
+    public ResponseEntity<?> getOfficesByBranch(@PathVariable("branch") Branch branch) {
+        return officeService.findOfficesByBranch(branch);
+    }
+
+    /*@GetMapping("/find/cars/{officeId}")
+    public ResponseEntity<List<Integer>> getOfficePlateIds(@PathVariable("officeId") Integer officeId) {
+        List<Integer> cars = officeService.findOfficePlateIds(officeId);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }*/
+
     @PostMapping("/add")
-    public ResponseEntity<Office> addOffice(@RequestBody Office office) {
-        Office newOffice = officeService.addOffice(office);
-        return new ResponseEntity<>(newOffice, HttpStatus.CREATED);
+    public ResponseEntity<?> addOffice(@RequestBody Office office) {
+        return officeService.addOffice(office);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Office> updateOffice(@RequestBody Office office) {
-        Office updatedOffice = officeService.updateOffice(office);
-        return new ResponseEntity<>(updatedOffice, HttpStatus.OK);
+    public ResponseEntity<?> updateOffice(@RequestBody Office office) {
+        return officeService.updateOffice(office);
     }
 
     @DeleteMapping("/delete/{officeId}")
-    public ResponseEntity<Office> deleteOffice(@PathVariable("officeId") Integer officeId) {
+    public ResponseEntity<?> deleteOffice(@PathVariable("officeId") Integer officeId) {
         officeService.deleteOffice(officeId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.valueOf("Deleted successfully."));
     }
 }

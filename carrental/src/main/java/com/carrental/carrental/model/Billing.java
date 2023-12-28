@@ -1,5 +1,7 @@
 package com.carrental.carrental.model;
 
+import com.carrental.carrental.model.enums.BillingStatus;
+import com.carrental.carrental.model.enums.Method;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -9,20 +11,20 @@ public class Billing implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer billingId;
-    @OneToOne
+    @OneToOne()
     @JoinColumn(name = "reservationId", nullable = false)
     private Reservation reservation;
     @Column(nullable = false)
-    private Integer method;     //0 for cash, 1 for credit
+    private Method method;
     @Column(nullable = false)
-    private String status;
-    @Column(nullable = false)
-    private String description;     //paid, pending, etc.
+    private BillingStatus status;
+    //@Column(nullable = false)
+    private String description;
 
     public Billing() {
     }
 
-    public Billing(Integer billingId, Reservation reservation, Integer method, String status, String description) {
+    public Billing(Integer billingId, Reservation reservation, Method method, BillingStatus status, String description) {
         this.billingId = billingId;
         this.reservation = reservation;
         this.method = method;
@@ -38,6 +40,10 @@ public class Billing implements Serializable {
         this.billingId = billingId;
     }
 
+    public Integer getReservationId() {
+        return this.reservation.getReservationId();
+    }
+
     public Reservation getReservation() {
         return reservation;
     }
@@ -46,19 +52,23 @@ public class Billing implements Serializable {
         this.reservation = reservation;
     }
 
-    public Integer getMethod() {
+    /*public void setReservationId(Integer reservationId) {
+        this.reservationId = reservationId;
+    }*/
+
+    public Method getMethod() {
         return method;
     }
 
-    public void setMethod(Integer method) {
+    public void setMethod(Method method) {
         this.method = method;
     }
 
-    public String getStatus() {
+    public BillingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(BillingStatus status) {
         this.status = status;
     }
 
@@ -66,7 +76,11 @@ public class Billing implements Serializable {
         return description;
     }
 
-    public void setDescription() {
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /*public void setDescription() {
         Long carId = reservation.getCar().getPlateId();
         Integer officeId = reservation.getOffice().getOfficeId();
         Float price = reservation.getCar().getRate();
@@ -77,16 +91,16 @@ public class Billing implements Serializable {
         Double payment = (daysReserved * price) + (daysLate * penalty);
         this.description = "For car of plate id = " + carId + "\nOffice No. " + officeId + "\nRate/Day = " + price + " $\nTotal number of reserved days = " + daysReserved +
         " days\nNumber of late days = " + daysLate +
-        " days\nLatency penalty/Day = " + penalty + "$\nTotal amount to be paid = " + payment + "$";
-    }
+        " days\nLatency penalty/Day = " + penalty + "$\nTotal amount to be paid = " + payment + "$\nPayment method: " + method.getDisplayName();
+    }*/
 
     @Override
     public String toString() {
         return "Billing{" +
                 "id=" + billingId +
                 ", reservation id=" + reservation.getReservationId() +
-                ", method=" + method +
-                ", status=" + status +
+                ", method=" + method.getDisplayName() +
+                ", status=" + status.getDisplayName() +
                 "}";
     }
 }

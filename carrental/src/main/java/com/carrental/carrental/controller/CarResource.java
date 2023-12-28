@@ -1,9 +1,11 @@
 package com.carrental.carrental.controller;
 
 import com.carrental.carrental.model.Car;
+import com.carrental.carrental.model.Office;
+import com.carrental.carrental.model.enums.CarStatus;
 import com.carrental.carrental.service.CarService;
+import com.carrental.carrental.service.OfficeService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,54 +13,95 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/car")
+@CrossOrigin("*")
 public class CarResource { // This is a mirroring of whatever we have in the service
     private final CarService carService;
+    private final OfficeService officeService;
 
-    public CarResource(CarService carService) {
+    public CarResource(CarService carService, OfficeService officeService) {
         this.carService = carService;
+        this.officeService = officeService;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Car>> getAllCars(){
-        List<Car> cars = carService.findAllCars();
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+    public ResponseEntity<?> getAllCars(){
+        return carService.findAllCars();
     }
 
     //api/car/find/500
     @GetMapping("/find/plate/{plateId}")
-    public ResponseEntity<Car> getCarByPlateId(@PathVariable("plateId") Long plateId){
-        Car car = carService.findCarByPlateId(plateId);
-        return new ResponseEntity<>(car, HttpStatus.OK);
+    public ResponseEntity<?> getCarByPlateId(@PathVariable("plateId") Long plateId){
+        return carService.findCarByPlateId(plateId);
     }
 
     @GetMapping("/find/brand/{brand}")
-    public ResponseEntity<List<Car>> getCarsByBrand(@PathVariable("brand") String brand){
-        List<Car> cars = carService.findCarsByBrand(brand);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+    public ResponseEntity<?> getCarsByBrand(@PathVariable("brand") String brand){
+        return carService.findCarsByBrand(brand);
     }
 
-    @GetMapping("/find/color/{color}")
-    public ResponseEntity<List<Car>> getCarsByColor(@PathVariable("brand") String color){
-        List<Car> cars = carService.findCarsByColor(color);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+    @GetMapping("/find/type/{type}")
+    public ResponseEntity<?> getCarsByType(@PathVariable("type") String type){
+        return carService.findCarsByType(type);
     }
 
     @GetMapping("/find/year/{year}")
-    public ResponseEntity<List<Car>> getCarByYear(@PathVariable("year") Integer year){
-        List<Car> cars = carService.findCarsByYear(year);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+    public ResponseEntity<?> getCarByYear(@PathVariable("year") Integer year){
+        return carService.findCarsByYear(year);
+    }
+
+    @GetMapping("/find/transmission/{transmissionType}")
+    public ResponseEntity<?> getCarsByTransmissionType(@PathVariable("transmissionType") String transmissionType){
+        return carService.findCarsByTransmissionType(transmissionType);
+    }
+
+    @GetMapping("/find/fuel/{fuelType}")
+    public ResponseEntity<?> getCarsByFuelType(@PathVariable("fuelType") String fuelType){
+        return carService.findCarsByFuelType(fuelType);
+    }
+
+    @GetMapping("/find/body/{bodyStyle}")
+    public ResponseEntity<?> getCarsByBodyStyle(@PathVariable("bodyStyle") String bodyStyle){
+        return carService.findCarsByBodyStyle(bodyStyle);
+    }
+
+    @GetMapping("/find/color/{color}")
+    public ResponseEntity<?> getCarsByColor(@PathVariable("color") String color){
+        return carService.findCarsByColor(color);
+    }
+
+    @GetMapping("/find/capacity/{capacity}")
+    public ResponseEntity<?> getCarsByCapacity(@PathVariable("capacity") Integer capacity){
+        return carService.findCarsByCapacity(capacity);
+    }
+
+    @GetMapping("/find/rate/{rate}")
+    public ResponseEntity<?> getCarsByRate(@PathVariable("rate") Float rate){
+        return carService.findCarsByRate(rate);
+    }
+
+    @GetMapping("/find/status/{status}")
+    public ResponseEntity<?> getCarsByStatus(@PathVariable("status") CarStatus status){
+        return carService.findCarsByStatus(status);
+    }
+
+    @GetMapping("/find/office/{officeId}")
+    public ResponseEntity<?> getCarsByOfficeId(@PathVariable("officeId") Integer officeId){
+        if(officeService.findOfficeByOfficeId(officeId).getStatusCode() == HttpStatus.FOUND)
+        {
+            Office office = (Office)officeService.findOfficeByOfficeId(officeId).getBody();
+            return carService.findCarsByOffice(office);
+        }
+        return new ResponseEntity<>("No office with id " + officeId, HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Car> addCar(@RequestBody Car car){
-        Car newCar = carService.addCar(car);
-        return new ResponseEntity<>(newCar, HttpStatus.CREATED);
+    public ResponseEntity<?> addCar(@RequestBody Car car){
+        return carService.addCar(car);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Car> updateCar(@RequestBody Car car){
-        Car updateCar = carService.updateCar(car);
-        return new ResponseEntity<>(updateCar, HttpStatus.OK);
+    public ResponseEntity<?> updateCar(@RequestBody Car car){
+        return carService.updateCar(car);
     }
 
     @DeleteMapping("/delete/{plateId}")

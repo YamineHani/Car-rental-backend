@@ -1,67 +1,78 @@
 package com.carrental.carrental.service;
 
-import com.carrental.carrental.exception.UserNotFoundException;
 import com.carrental.carrental.model.Car;
-import com.carrental.carrental.model.Office;
 import com.carrental.carrental.model.Reservation;
+import com.carrental.carrental.repo.CarRepo;
 import com.carrental.carrental.repo.ReservationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
     private final ReservationRepo reservationRepo;
+    private final CarRepo carRepo;
 
     @Autowired
-    public ReservationService(ReservationRepo reservationRepo) {
+    public ReservationService(ReservationRepo reservationRepo, CarRepo carRepo) {
         this.reservationRepo = reservationRepo;
+        this.carRepo = carRepo;
     }
 
-    public Reservation addReservation(Reservation reservation) {
-        return reservationRepo.save(reservation);
+    public ResponseEntity<?> addReservation(Reservation reservation) {
+        reservationRepo.save(reservation);
+        return new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
     }
 
-    public Reservation updateReservation(Reservation reservation) {
-        if(reservationRepo.existsById(reservation.getReservationId()) == false)
+    public ResponseEntity<?> findAllReservations() {
+        List<Reservation> reservations = reservationRepo.findAll();
+        if(reservations.isEmpty())
         {
-            return reservationRepo.save(reservation);
+            return new ResponseEntity<>("No reservations currently exist", HttpStatus.NOT_FOUND);
         }
-        else
-        {
-            return findReservationByReservationId(reservation.getReservationId());
-        }
+        return new ResponseEntity<>(reservations, HttpStatus.FOUND);
     }
 
-    public List<Reservation> findAllReservations() {
-        return reservationRepo.findAll();
-    }
-
-    public Reservation findReservationByReservationId(Integer reservationId) {
-        return reservationRepo.findReservationByReservationId(reservationId)
-                .orElseThrow(() -> new UserNotFoundException("Reservation by id "+ reservationId + "was not found"));
-    }
-
-    public List<Reservation> findReservationsByStartDate(Date startDate) {
-        return reservationRepo.findReservationsByStartDate(startDate)
-                .orElseThrow(() -> new UserNotFoundException("Reservation by start date "+ startDate + "was not found"));
-    }
-
-    public List<Reservation> findReservationsByCar(Car car) {
-        return reservationRepo.findReservationsByCar(car)
-                .orElseThrow(() -> new UserNotFoundException("Reservation by car of id "+ car.getPlateId() + "was not found"));
-    }
-
-    public List<Reservation> findReservationsByOffice(Office office) {
-        return reservationRepo.findReservationsByOffice(office)
-                .orElseThrow(() -> new UserNotFoundException("Reservation by office of id "+ office.getOfficeId() + "was not found"));
+    public ResponseEntity<?> updateReservation(Reservation reservation) {
+        reservationRepo.save(reservation);
+        return new ResponseEntity<>("Successfully updated", HttpStatus.OK);
     }
 
     @Transactional
     public void deleteReservation(Integer reservationId) {
         reservationRepo.deleteReservationByReservationId(reservationId);
+    }
+
+    public ResponseEntity<?> findReservationByReservationId(Integer reservationId) {
+        Optional<Reservation> reservation = reservationRepo.findReservationByReservationId(reservationId);
+        if(reservation.isPresent())
+        {
+            return new ResponseEntity<>(reservation, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("No reservation with id " + reservationId + " was found", HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<?> findReservationsByStartDate(Date startDate) {
+        Optional<List<Reservation>> reservations = reservationRepo.findReservationsByStartDate(startDate);
+        if(reservations.isPresent())
+        {
+            return new ResponseEntity<>(reservations, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("No reservation starting on " + startDate + " was found", HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<?> findReservationsByCar(Car car) {
+        Optional<List<Reservation>> reservations = reservationRepo.findReservationsByCar(car);
+        if(reservations.isPresent())
+        {
+            return new ResponseEntity<>(reservations, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("No reservation for car with plate id " + car.getPlateId() + " was found", HttpStatus.NOT_FOUND);
     }
 }

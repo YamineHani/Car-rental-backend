@@ -1,8 +1,12 @@
 package com.carrental.carrental.model;
 
+import com.carrental.carrental.model.enums.Branch;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
+import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,23 +19,22 @@ public class Office implements Serializable {
     @Column(nullable = false)
     private String city;
     @Column(nullable = false)
-    private Integer branch;     //0 for airport, 1 for downtown
+    private Branch branch;
     @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "office")
-    private List<Reservation> reservations;
+    private List<Car> cars = new ArrayList<Car>();
 
     public Office() {
     }
 
-    public Office(Integer officeId, String country, String city, Integer branch, String password, List<Reservation> reservations) {
+    public Office(Integer officeId, String country, String city, Branch branch, String password) {
         this.officeId = officeId;
         this.country = country;
         this.city = city;
         this.branch = branch;
         this.password = password;
-        this.reservations = reservations;
     }
 
     public Integer getOfficeId() {
@@ -58,11 +61,11 @@ public class Office implements Serializable {
         this.city = city;
     }
 
-    public Integer getBranch() {
+    public Branch getBranch() {
         return branch;
     }
 
-    public void setBranch(Integer branch) {
+    public void setBranch(Branch branch) {
         this.branch = branch;
     }
 
@@ -72,14 +75,6 @@ public class Office implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Reservation> getReservation() {
-        return reservations;
-    }
-
-    public void setReservation(List<Reservation> reservations) {
-        this.reservations = reservations;
     }
 
     @Override
