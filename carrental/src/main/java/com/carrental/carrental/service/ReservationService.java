@@ -34,9 +34,9 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepo.findAll();
         if(reservations.isEmpty())
         {
-            return new ResponseEntity<>("No reservations currently exist", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No reservations currently exist", HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(reservations, HttpStatus.FOUND);
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     public ResponseEntity<?> updateReservation(Reservation reservation) {
@@ -53,26 +53,26 @@ public class ReservationService {
         Optional<Reservation> reservation = reservationRepo.findReservationByReservationId(reservationId);
         if(reservation.isPresent())
         {
-            return new ResponseEntity<>(reservation, HttpStatus.FOUND);
+            return new ResponseEntity<>(reservation, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No reservation with id " + reservationId + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No reservation with id " + reservationId + " was found", HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findReservationsByStartDate(Date startDate) {
         Optional<List<Reservation>> reservations = reservationRepo.findReservationsByStartDate(startDate);
         if(reservations.isPresent())
         {
-            return new ResponseEntity<>(reservations, HttpStatus.FOUND);
+            return new ResponseEntity<>(reservations, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No reservation starting on " + startDate + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No reservation starting on " + startDate + " was found", HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findReservationsByCar(Car car) {
         Optional<List<Reservation>> reservations = reservationRepo.findReservationsByCar(car);
         if(reservations.isPresent())
         {
-            return new ResponseEntity<>(reservations, HttpStatus.FOUND);
+            return new ResponseEntity<>(reservations, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No reservation for car with plate id " + car.getPlateId() + " was found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No reservation for car with plate id " + car.getPlateId() + " was found", HttpStatus.NO_CONTENT);
     }
 }

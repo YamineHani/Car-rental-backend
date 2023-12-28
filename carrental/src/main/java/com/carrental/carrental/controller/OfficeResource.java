@@ -1,6 +1,5 @@
 package com.carrental.carrental.controller;
 
-import com.carrental.carrental.model.Car;
 import com.carrental.carrental.model.Office;
 import com.carrental.carrental.model.enums.Branch;
 import com.carrental.carrental.service.OfficeService;
@@ -64,6 +63,6 @@ public class OfficeResource {
     @DeleteMapping("/delete/{officeId}")
     public ResponseEntity<?> deleteOffice(@PathVariable("officeId") Integer officeId) {
         officeService.deleteOffice(officeId);
-        return new ResponseEntity<>(HttpStatus.valueOf("Deleted successfully."));
+        return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
     }
 }
