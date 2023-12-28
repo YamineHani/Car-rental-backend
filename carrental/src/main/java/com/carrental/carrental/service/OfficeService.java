@@ -22,7 +22,7 @@ public class OfficeService {
     }
 
     public ResponseEntity<?> addOffice(Office office) {
-        if(officeRepo.existsById(office.getOfficeId()) == false)
+        if(!officeRepo.existsById(office.getOfficeId()))
         {
             officeRepo.save(office);
             return new ResponseEntity<>("Successfully created", HttpStatus.CREATED);

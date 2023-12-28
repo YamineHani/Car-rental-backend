@@ -26,14 +26,14 @@ public class CarService {
     }
 
     public ResponseEntity<?> addCar(Car car){
-        if(carRepo.existsById(car.getPlateId()) == false)
+        if(!carRepo.existsById(car.getPlateId()))
         {
-            if(officeRepo.existsById(car.getOfficeId()) == true)
+            if(officeRepo.existsById(car.getOffice().getOfficeId()))
             {
                 carRepo.save(car);
                 return new ResponseEntity<>("Successfully added", HttpStatus.CREATED);
             }
-            return new ResponseEntity<>("No office with id " + car.getOfficeId(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Car with plate id " + car.getPlateId() + " already exists", HttpStatus.NOT_FOUND);
     }
@@ -47,15 +47,15 @@ public class CarService {
         return new ResponseEntity<>(cars, HttpStatus.FOUND);
     }
 
-    public ResponseEntity updateCar(Car car){
-        if(carRepo.existsById(car.getPlateId()) == true)
+    public ResponseEntity<?> updateCar(Car car){
+        if(carRepo.existsById(car.getPlateId()))
         {
-            if(officeRepo.existsById(car.getOfficeId()) == true)
+            if(officeRepo.existsById(car.getOffice().getOfficeId()))
             {
                 carRepo.save(car);
                 return new ResponseEntity<>("Successfully updated", HttpStatus.OK);
             }
-            return new ResponseEntity<>("No office with id " + car.getOfficeId(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("No car with plate id " + car.getPlateId(), HttpStatus.NOT_FOUND);
     }

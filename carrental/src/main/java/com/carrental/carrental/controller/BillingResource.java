@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/billing")
+@RequestMapping("api/v1/billing")
 @CrossOrigin("*")
 public class BillingResource {
     private final BillingService billingService;

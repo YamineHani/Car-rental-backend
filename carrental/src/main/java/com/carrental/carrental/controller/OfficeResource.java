@@ -1,6 +1,5 @@
 package com.carrental.carrental.controller;
 
-import com.carrental.carrental.model.Car;
 import com.carrental.carrental.model.Office;
 import com.carrental.carrental.model.enums.Branch;
 import com.carrental.carrental.service.OfficeService;
@@ -8,10 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/office")
+@RequestMapping("api/v1/office")
 @CrossOrigin("*")
 public class OfficeResource {
     private final OfficeService officeService;

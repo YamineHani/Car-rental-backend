@@ -15,7 +15,7 @@ import java.sql.Date;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/reservations")
+@RequestMapping("api/v1/reservations")
 @CrossOrigin("*")
 public class ReservationResource {
     private final ReservationService reservationService;

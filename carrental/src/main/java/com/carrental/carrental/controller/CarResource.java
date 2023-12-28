@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/car")
+@RequestMapping("api/v1/car")
 @CrossOrigin("*")
 public class CarResource { // This is a mirroring of whatever we have in the service
     private final CarService carService;
