@@ -1,6 +1,9 @@
 package com.carrental.carrental.model;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.Reference;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,33 +25,26 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private Boolean driver;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "plateId", nullable = false)
     private Car car;
-
-    @ManyToOne
-    @JoinColumn(name = "officeId", nullable = false)
-    private Office office;
-
+    private String license;
 
     @OneToOne(mappedBy = "reservation")
     private Billing billing;
 
-    private String license;
-
     public Reservation() {
     }
 
-    public Reservation(Integer reservationId, Date startDate, Integer days, Date endDate, Boolean driver, Car car, Office office, Billing billing, String license) {
+    public Reservation(Integer reservationId, Date startDate, Integer days, Date endDate, Boolean driver, Car car, String license) {
         this.reservationId = reservationId;
         this.startDate = startDate;
         this.days = days;
         this.endDate = endDate;
         this.driver = driver;
         this.car = car;
-        this.office = office;
-        this.billing = billing;
         this.license = license;
+
     }
 
     public Integer getReservationId() {
@@ -91,6 +87,14 @@ public class Reservation implements Serializable {
         this.driver = driver;
     }
 
+    public Long getPlateId() {
+        return this.car.getPlateId();
+    }
+
+    /*public void setPlateId(Long plateId) {
+        this.plateId = plateId;
+    }*/
+
     public String getLicense() {
         return license;
     }
@@ -105,22 +109,7 @@ public class Reservation implements Serializable {
 
     public void setCar(Car car) {
         this.car = car;
-    }
-
-    public Office getOffice() {
-        return office;
-    }
-
-    public void setOffice(Office office) {
-        this.office = office;
-    }
-
-    public Billing getBilling() {
-        return billing;
-    }
-
-    public void setBilling(Billing billing) {
-        this.billing = billing;
+        //this.plateId = this.car.getPlateId();
     }
 
     @Override
@@ -131,8 +120,7 @@ public class Reservation implements Serializable {
                 ", endDate="+endDate+
                 ", driver="+driver+
                 ", license="+license+
-                ", car_plate_id="+car.getPlateId()+
-                "office_id="+office.getOfficeId()+
+                ", car_plate_id="+this.car.getPlateId()+
                 "}";
     }
 }

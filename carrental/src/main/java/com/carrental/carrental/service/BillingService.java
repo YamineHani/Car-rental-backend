@@ -1,63 +1,109 @@
 package com.carrental.carrental.service;
 
-import com.carrental.carrental.exception.UserNotFoundException;
 import com.carrental.carrental.model.Billing;
-import com.carrental.carrental.model.Office;
 import com.carrental.carrental.model.Reservation;
+import com.carrental.carrental.model.enums.BillingStatus;
+import com.carrental.carrental.model.enums.Method;
 import com.carrental.carrental.repo.BillingRepo;
+import com.carrental.carrental.repo.CarRepo;
+import com.carrental.carrental.repo.ReservationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BillingService {
     private final BillingRepo billingRepo;
+    private final ReservationRepo reservationRepo;
+    private final CarRepo carRepo;
 
     @Autowired
-    public BillingService(BillingRepo billingRepo) {
+    public BillingService(BillingRepo billingRepo, ReservationRepo reservationRepo, CarRepo carRepo) {
         this.billingRepo = billingRepo;
+        this.reservationRepo = reservationRepo;
+        this.carRepo = carRepo;
     }
 
-    public Billing addBilling(Billing billing) {
-        if(billingRepo.existsById(billing.getBillingId()) == false)
+    public ResponseEntity<?> addBilling(Billing billing) {
+        billingRepo.save(billing);
+        return new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
+        //return new ResponseEntity<>("Can't create this billing\nCheck your inputs", HttpStatus.CONFLICT);
+    }
+
+    public ResponseEntity<?> findAllBillings() {
+        List<Billing> billings = billingRepo.findAll();
+        if(billings.isEmpty())
         {
-            return billingRepo.save(billing);
+            return new ResponseEntity<>("No billings currently existing", HttpStatus.NOT_FOUND);
         }
-        else
+        return new ResponseEntity<>(billings, HttpStatus.FOUND);
+    }
+
+    //todo handling updating description
+    public ResponseEntity<?> updateBilling(Billing billing) {
+        /*if(reservationRepo.findReservationByReservationId(billing.getReservationId()).get().getEndDate() != null)
         {
-            return findBillingByReservation(billing.getReservation());
-        }
-    }
-
-    public Billing updateBilling(Billing billing) {
-        if(billingRepo.existsById(billing.getBillingId()) == true)
-        {
-            return billingRepo.save(billing);
-        }
-        else
-        {
-            return findBillingByReservation(billing.getReservation());
-        }
-    }
-
-    public List<Billing> findAllBillings() {
-        return billingRepo.findAll();
-    }
-
-    public Billing findBillingByBillingId(Integer billingId) {
-        return billingRepo.findBillingByBillingId(billingId)
-                .orElseThrow(() -> new UserNotFoundException("Billing by id "+ billingId + "was not found"));
-    }
-
-    public Billing findBillingByReservation(Reservation reservation) {
-        return billingRepo.findBillingByReservation(reservation)
-                .orElseThrow(() -> new UserNotFoundException("Billing by reservation of id "+ reservation.getReservationId() + "was not found"));
+            System.out.println("here");
+            Long carId = billing.getReservation().getPlateId();
+            Integer officeId = carRepo.findCarByPlateId(billing.getReservation().getPlateId()).get().getOfficeId();
+            Float price = carRepo.findCarByPlateId(billing.getReservation().getPlateId()).get().getRate();
+            Integer daysReserved = billing.getReservation().getDays();
+            Long daysTotal = ((billing.getReservation().getEndDate().getTime() - billing.getReservation().getStartDate().getTime()) / (1000*60*60*24)) % 365;
+            Long daysLate = (daysTotal - daysReserved) > 0? (daysTotal - daysReserved): 0;
+            Double penalty = price * 0.12;
+            Double payment = (daysReserved * price) + (daysLate * penalty);
+            String description = "For car of plate id = " + carId + "\nOffice No. " + officeId + "\nRate/Day = " + price + " $\nTotal number of reserved days = " + daysReserved +
+                    " days\nNumber of late days = " + daysLate +
+                    " days\nLatency penalty/Day = " + penalty + "$\nTotal amount to be paid = " + payment + "$\nPayment method: " + billing.getMethod().getDisplayName();
+            billing.setDescription(description);
+        }*/
+        billingRepo.save(billing);
+        return new ResponseEntity<>("Successfully updated", HttpStatus.OK);
     }
 
     @Transactional
     public void deleteBilling(Integer billingId) {
         billingRepo.deleteBillingByBillingId(billingId);
+    }
+
+    public ResponseEntity<?> findBillingByBillingId(Integer billingId) {
+        Optional<Billing> billing = billingRepo.findBillingByBillingId(billingId);
+        if(billing.isPresent())
+        {
+            return new ResponseEntity<>(billing, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("No billing with id " + billingId, HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<?> findBillingByReservation(Reservation reservation) {
+        Optional<Billing> billing = billingRepo.findBillingByReservation(reservation);
+        if(billing.isPresent())
+        {
+            return new ResponseEntity<>(billing, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("No billing for reservation of id " + reservation.getReservationId(), HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<?> findBillingsByMethod(Method method) {
+        Optional<List<Billing>> billings = billingRepo.findBillingsByMethod(method);
+        if(billings.isPresent())
+        {
+            return new ResponseEntity<>(billings, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("No billing with " + method.getDisplayName() + " payment method was found", HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<?> findBillingsByStatus(BillingStatus status) {
+        Optional<List<Billing>> billings = billingRepo.findBillingsByStatus(status);
+        if(billings.isPresent())
+        {
+            return new ResponseEntity<>(billings, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("No billing with " + status.getDisplayName() + " status was found", HttpStatus.NOT_FOUND);
     }
 }

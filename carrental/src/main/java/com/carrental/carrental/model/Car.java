@@ -1,14 +1,17 @@
 package com.carrental.carrental.model;
 
+import com.carrental.carrental.model.enums.CarStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Car implements Serializable {
     @Id
-    private long plateId;
+    private Long plateId;
     @Column(nullable = false)
     private String brand;
     @Column(nullable = false)
@@ -16,7 +19,7 @@ public class Car implements Serializable {
     @Column(nullable = false)
     private Integer year;
     @Column(nullable = false)
-    private String status;
+    private CarStatus status;
     @Column(nullable = false)
     private Float rate;
     @Column(nullable = false)
@@ -32,11 +35,14 @@ public class Car implements Serializable {
     private String imageUrl;
 
     @OneToMany(mappedBy = "car")
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<Reservation>();
+    @ManyToOne()
+    @JoinColumn(name = "officeId", nullable = false)
+    private Office office;
 
     public Car(){}
 
-    public Car(long plateId, String brand, String type, Integer year, String status, Float rate, String transmissionType, String fuelType, String bodyStyle, String color, Integer capacity, String imageUrl, List<Reservation> reservations) {
+    public Car(long plateId, String brand, String type, Integer year, CarStatus status, Float rate, String transmissionType, String fuelType, String bodyStyle, String color, Integer capacity, String imageUrl, Office office) {
         this.plateId = plateId;
         this.brand = brand;
         this.type = type;
@@ -49,14 +55,14 @@ public class Car implements Serializable {
         this.color = color;
         this.capacity = capacity;
         this.imageUrl = imageUrl;
-        this.reservations = reservations;
+        this.office = office;
     }
 
-    public long getPlateId() {
+    public Long getPlateId() {
         return plateId;
     }
 
-    public void setPlateId(long plateId) {
+    public void setPlateId(Long plateId) {
         this.plateId = plateId;
     }
 
@@ -84,11 +90,11 @@ public class Car implements Serializable {
         this.year = year;
     }
 
-    public String getStatus() {
+    public CarStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CarStatus status) {
         this.status = status;
     }
 
@@ -148,12 +154,21 @@ public class Car implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public List<Reservation> getReservation() {
-        return reservations;
+    public Integer getOfficeId() {
+        return this.office.getOfficeId();
     }
 
-    public void setReservation(List<Reservation> reservations) {
-        this.reservations = reservations;
+    /*public void setOfficeId(Integer officeId) {
+        this.officeId = officeId;
+    }*/
+
+    public Office getOffice() {
+        return office;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
+        //this.office = this.office.getOfficeId();
     }
 
     @Override
@@ -161,8 +176,9 @@ public class Car implements Serializable {
         return "Car{"+
                 "plate id=" + plateId +
                 ", brand=" + brand +
-                ", status=" + status +
+                ", status=" + status.getDisplayName() +
                 ", imageUrl=" + imageUrl+
+                ", office id= " + office.getOfficeId() +
                 "}";
     }
 
