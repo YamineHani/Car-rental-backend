@@ -1,6 +1,9 @@
 package com.carrental.carrental.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Reference;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 import java.io.Serializable;
 import java.util.Date;
 
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 public class Reservation implements Serializable {
     @Id
@@ -33,9 +39,7 @@ public class Reservation implements Serializable {
     @OneToOne(mappedBy = "reservation")
     private Billing billing;
 
-    public Reservation() {
-    }
-
+    //TRY TO REMOVE ID
     public Reservation(Integer reservationId, Date startDate, Integer days, Date endDate, Boolean driver, Car car, String license) {
         this.reservationId = reservationId;
         this.startDate = startDate;
@@ -45,71 +49,6 @@ public class Reservation implements Serializable {
         this.car = car;
         this.license = license;
 
-    }
-
-    public Integer getReservationId() {
-        return reservationId;
-    }
-
-    public void setReservationId(Integer reservationId) {
-        this.reservationId = reservationId;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Integer getDays() {
-        return days;
-    }
-
-    public void setDays(Integer days) {
-        this.days = days;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Boolean getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Boolean driver) {
-        this.driver = driver;
-    }
-
-    public Long getPlateId() {
-        return this.car.getPlateId();
-    }
-
-    /*public void setPlateId(Long plateId) {
-        this.plateId = plateId;
-    }*/
-
-    public String getLicense() {
-        return license;
-    }
-
-    public void setLicense(String license) {
-        this.license = license;
-    }
-
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
-        //this.plateId = this.car.getPlateId();
     }
 
     @Override
