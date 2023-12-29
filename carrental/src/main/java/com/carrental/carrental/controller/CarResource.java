@@ -92,7 +92,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCar(@RequestBody Car car){
+    public ResponseEntity<String> addCar(@RequestBody Car car){
         return carService.addCar(car);
     }
 

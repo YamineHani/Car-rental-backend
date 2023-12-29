@@ -63,9 +63,9 @@ public class ReservationResource {
 
     @PostMapping("/add")
     public ResponseEntity<?> addReservation(@RequestBody Reservation reservation) {
-        if(carService.findCarByPlateId(reservation.getPlateId()).getStatusCode() == HttpStatus.OK)
+        if(carService.findCarByPlateId(reservation.getCar().getPlateId()).getStatusCode() == HttpStatus.OK)
         {
-            Optional<Car> car = (Optional<Car>)carService.findCarByPlateId(reservation.getPlateId()).getBody();
+            Optional<Car> car = (Optional<Car>)carService.findCarByPlateId(reservation.getCar().getPlateId()).getBody();
             if(car.get().getStatus() == CarStatus.ACTIVE)
             {
                 car.get().setStatus(CarStatus.RENTED);
@@ -73,7 +73,7 @@ public class ReservationResource {
             }
             return new ResponseEntity<>("Car selected is unavailable for now", HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>("No car with plate id " + reservation.getPlateId() + " was found", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("No car with plate id " + reservation.getCar().getPlateId() + " was found", HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/update")
@@ -81,9 +81,9 @@ public class ReservationResource {
         if(reservationService.findReservationByReservationId(reservation.getReservationId()).getStatusCode() == HttpStatus.OK)
         {
             Optional<Reservation> reservationFound = (Optional<Reservation>)reservationService.findReservationByReservationId(reservation.getReservationId()).getBody();
-            if(carService.findCarByPlateId(reservation.getPlateId()).getStatusCode() == HttpStatus.OK)
+            if(carService.findCarByPlateId(reservation.getCar().getPlateId()).getStatusCode() == HttpStatus.OK)
             {
-                if(reservationFound.get().getPlateId().equals(reservation.getPlateId()))
+                if(reservationFound.get().getCar().getPlateId().equals(reservation.getCar().getPlateId()))
                 {
                     if(reservation.getEndDate() != null)
                     {
@@ -94,7 +94,7 @@ public class ReservationResource {
                     }
                     return reservationService.updateReservation(reservation);
                 }
-                Optional<Car> carNew = (Optional<Car>)carService.findCarByPlateId(reservation.getPlateId()).getBody();
+                Optional<Car> carNew = (Optional<Car>)carService.findCarByPlateId(reservation.getCar().getPlateId()).getBody();
                 Car carOld = reservationFound.get().getCar();
                 if(carNew.get().getStatus() == CarStatus.ACTIVE)
                 {
@@ -104,7 +104,7 @@ public class ReservationResource {
                 }
                 return new ResponseEntity<>("Car selected is unavailable for now", HttpStatus.CONFLICT);
             }
-            return new ResponseEntity<>("No car with plate id " + reservation.getPlateId() + " was found", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("No car with plate id " + reservation.getCar().getPlateId() + " was found", HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>("No reservation with id " + reservation.getReservationId() + " was found", HttpStatus.NO_CONTENT);
     }

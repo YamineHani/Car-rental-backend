@@ -25,7 +25,7 @@ public class CarService {
         this.officeRepo = officeRepo;
     }
 
-    public ResponseEntity<?> addCar(Car car){ //edit save part
+    public ResponseEntity<String> addCar(Car car){ //edit save part
         if(!carRepo.existsById(car.getPlateId()))
         {
             if(officeRepo.existsById(car.getOffice().getOfficeId()))
@@ -33,9 +33,9 @@ public class CarService {
                 carRepo.save(car);
                 return new ResponseEntity<>("Successfully added", HttpStatus.CREATED);
             }
-            return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>("Car with plate id " + car.getPlateId() + " already exists", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Car with plate id " + car.getPlateId() + " already exists", HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> findAllCars(){
