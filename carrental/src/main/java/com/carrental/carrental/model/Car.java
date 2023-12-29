@@ -46,7 +46,9 @@ public class Car implements Serializable {
     @JoinColumn(name = "officeId", nullable = false)
     private Office office;
 
-    public Car(long plateId, String brand, String type, Integer year, CarStatus status, Float rate, String transmissionType, String fuelType, String bodyStyle, String color, Integer capacity, String imageUrl, Office office) {
+    public Car(Long plateId, String brand, String type, Integer year, CarStatus status,
+               Float rate, String transmissionType, String fuelType, String bodyStyle, String color,
+               Integer capacity, String imageUrl, Office office) {
         this.plateId = plateId;
         this.brand = brand;
         this.type = type;

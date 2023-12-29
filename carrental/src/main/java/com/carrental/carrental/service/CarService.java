@@ -30,7 +30,10 @@ public class CarService {
         {
             if(officeRepo.existsById(car.getOffice().getOfficeId()))
             {
-                carRepo.save(car);
+                Car newCar = new Car(car.getPlateId(),car.getBrand(),car.getType(),car.getYear(),
+                        car.getStatus(),car.getRate(),car.getTransmissionType(),car.getFuelType(),
+                        car.getBodyStyle(),car.getColor(),car.getCapacity(),car.getImageUrl(),car.getOffice());
+                carRepo.save(newCar);
                 return new ResponseEntity<>("Successfully added", HttpStatus.CREATED);
             }
             return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.UNAUTHORIZED);
