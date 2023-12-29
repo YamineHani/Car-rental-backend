@@ -9,10 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode //to compare easily
 @ToString
-public class AppUserRegistrationRequest {
-
-    private final String firstName;
-    private final String lastName;
+public class LoginRequest {
     private final String email;
     private final String password;
 

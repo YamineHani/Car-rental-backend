@@ -1,85 +1,61 @@
 package com.carrental.carrental.model;
 
+import com.carrental.carrental.model.enums.Branch;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Formula;
+import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"city", "country", "branch"})})
 public class Office implements Serializable {
     @Id
+    @SequenceGenerator( // used to generate unique identifiers
+            name = "office_sequence",
+            sequenceName = "office_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "office_sequence"
+    )
     private Integer officeId;
     @Column(nullable = false)
     private String country;
     @Column(nullable = false)
     private String city;
     @Column(nullable = false)
-    private Integer branch;     //0 for airport, 1 for downtown
+    private Branch branch;
+
+    @Column(unique = true)
+    private String email;
     @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "office")
-    private List<Reservation> reservations;
+    @JsonBackReference
+    private List<Car> cars = new ArrayList<Car>();
 
-    public Office() {
-    }
-
-    public Office(Integer officeId, String country, String city, Integer branch, String password, List<Reservation> reservations) {
-        this.officeId = officeId;
+    //constructor without id because id is auto-generated you shouldn't enter it manually
+    // ADDED EMAIL FOR LOGIN
+    public Office(String country, String city, Branch branch, String password, String email) {
         this.country = country;
         this.city = city;
         this.branch = branch;
         this.password = password;
-        this.reservations = reservations;
-    }
-
-    public Integer getOfficeId() {
-        return officeId;
-    }
-
-    public void setOfficeId(Integer officeId) {
-        this.officeId = officeId;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public Integer getBranch() {
-        return branch;
-    }
-
-    public void setBranch(Integer branch) {
-        this.branch = branch;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Reservation> getReservation() {
-        return reservations;
-    }
-
-    public void setReservation(List<Reservation> reservations) {
-        this.reservations = reservations;
+        this.email = email;
     }
 
     @Override
