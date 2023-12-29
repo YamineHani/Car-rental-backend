@@ -22,6 +22,15 @@ import java.util.List;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"city", "country", "branch"})})
 public class Office implements Serializable {
     @Id
+    @SequenceGenerator( // used to generate unique identifiers
+            name = "office_sequence",
+            sequenceName = "office_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "office_sequence"
+    )
     private Integer officeId;
     @Column(nullable = false)
     private String country;
@@ -29,6 +38,9 @@ public class Office implements Serializable {
     private String city;
     @Column(nullable = false)
     private Branch branch;
+
+    @Column(unique = true)
+    private String email;
     @Column(nullable = false)
     private String password;
 
@@ -36,12 +48,14 @@ public class Office implements Serializable {
     @JsonBackReference
     private List<Car> cars = new ArrayList<Car>();
 
-    public Office(Integer officeId, String country, String city, Branch branch, String password) {
-        this.officeId = officeId;
+    //constructor without id because id is auto-generated you shouldn't enter it manually
+    // ADDED EMAIL FOR LOGIN
+    public Office(String country, String city, Branch branch, String password, String email) {
         this.country = country;
         this.city = city;
         this.branch = branch;
         this.password = password;
+        this.email = email;
     }
 
     @Override

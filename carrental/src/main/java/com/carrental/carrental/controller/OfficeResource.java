@@ -1,22 +1,22 @@
 package com.carrental.carrental.controller;
 
 import com.carrental.carrental.model.Office;
+import com.carrental.carrental.model.User;
 import com.carrental.carrental.model.enums.Branch;
 import com.carrental.carrental.service.OfficeService;
+import com.carrental.carrental.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("api/v1/office")
 @CrossOrigin("*")
 public class OfficeResource {
     private final OfficeService officeService;
-
-    public OfficeResource(OfficeService officeService) {
-        this.officeService = officeService;
-    }
-
+    private final UserService userService;
     @GetMapping("/all")
     public ResponseEntity<?> getAllOffices() {
         return officeService.findAllOffices();
@@ -49,18 +49,26 @@ public class OfficeResource {
     }*/
 
     @PostMapping("/add")
-    public ResponseEntity<?> addOffice(@RequestBody Office office) {
+    public ResponseEntity<String> addOffice(@RequestBody Office office) {
         return officeService.addOffice(office);
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateOffice(@RequestBody Office office) {
+        //TODO CHECK IF IT UPDATES STH IN USER
         return officeService.updateOffice(office);
     }
 
+    //ADDED PART TO DELETE OFFICE USER
     @DeleteMapping("/delete/{officeId}")
-    public ResponseEntity<?> deleteOffice(@PathVariable("officeId") Integer officeId) {
-        officeService.deleteOffice(officeId);
-        return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
+    public ResponseEntity<String> deleteOffice(@PathVariable("officeId") Integer officeId) {
+        ResponseEntity<?> responseEntity = officeService.findOfficeByOfficeId(officeId);
+        if(responseEntity.getStatusCode().isSameCodeAs(HttpStatus.OK)){
+            Office office = (Office) responseEntity.getBody();
+            userService.deleteUser(office.getEmail());
+            officeService.deleteOffice(officeId);
+            return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("NOT FOUND", HttpStatus.NOT_FOUND);
     }
 }

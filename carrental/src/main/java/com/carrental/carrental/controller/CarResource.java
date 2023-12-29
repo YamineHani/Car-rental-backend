@@ -5,6 +5,7 @@ import com.carrental.carrental.model.Office;
 import com.carrental.carrental.model.enums.CarStatus;
 import com.carrental.carrental.service.CarService;
 import com.carrental.carrental.service.OfficeService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +14,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/car")
+@AllArgsConstructor
 @CrossOrigin("*")
 public class CarResource { // This is a mirroring of whatever we have in the service
     private final CarService carService;
     private final OfficeService officeService;
-
-    public CarResource(CarService carService, OfficeService officeService) {
-        this.carService = carService;
-        this.officeService = officeService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCars(){

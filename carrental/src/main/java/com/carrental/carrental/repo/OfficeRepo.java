@@ -12,11 +12,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OfficeRepo extends JpaRepository<Office,Integer> {
+    boolean existsByCityAndCountryAndBranch(String city, String country, Branch branch);
     Optional<List<Office>> findOfficesByCountry(String country);
 
     void deleteOfficeByOfficeId(Integer officeId);
 
     Optional<Office> findOfficeByOfficeId(Integer id);
+
+    Optional<Office> findOfficeByEmail(String email);
 
     Optional<List<Office>> findOfficesByCity(String city);
 

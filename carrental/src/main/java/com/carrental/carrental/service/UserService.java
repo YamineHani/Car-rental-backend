@@ -129,4 +129,8 @@ public class UserService implements UserDetailsService {
             return new ResponseEntity<>("Email doesn't exist, register now!",HttpStatus.UNAUTHORIZED);
         }
     }
+
+    public void deleteUser (String email){
+        userRepo.deleteUserByEmail(email);
+    }
 }
