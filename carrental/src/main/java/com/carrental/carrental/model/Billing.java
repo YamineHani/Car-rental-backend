@@ -3,9 +3,15 @@ package com.carrental.carrental.model;
 import com.carrental.carrental.model.enums.BillingStatus;
 import com.carrental.carrental.model.enums.Method;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 public class Billing implements Serializable {
     @Id
@@ -21,62 +27,11 @@ public class Billing implements Serializable {
     //@Column(nullable = false)
     private String description;
 
-    public Billing() {
-    }
-
     public Billing(Integer billingId, Reservation reservation, Method method, BillingStatus status, String description) {
         this.billingId = billingId;
         this.reservation = reservation;
         this.method = method;
         this.status = status;
-        this.description = description;
-    }
-
-    public Integer getBillingId() {
-        return billingId;
-    }
-
-    public void setBillingId(Integer billingId) {
-        this.billingId = billingId;
-    }
-
-    public Integer getReservationId() {
-        return this.reservation.getReservationId();
-    }
-
-    public Reservation getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
-
-    /*public void setReservationId(Integer reservationId) {
-        this.reservationId = reservationId;
-    }*/
-
-    public Method getMethod() {
-        return method;
-    }
-
-    public void setMethod(Method method) {
-        this.method = method;
-    }
-
-    public BillingStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BillingStatus status) {
-        this.status = status;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
     }
 

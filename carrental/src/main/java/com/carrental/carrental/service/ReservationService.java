@@ -2,8 +2,11 @@ package com.carrental.carrental.service;
 
 import com.carrental.carrental.model.Car;
 import com.carrental.carrental.model.Reservation;
+import com.carrental.carrental.model.User;
+import com.carrental.carrental.model.enums.CarStatus;
 import com.carrental.carrental.repo.CarRepo;
 import com.carrental.carrental.repo.ReservationRepo;
+import com.carrental.carrental.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +21,28 @@ import java.util.Optional;
 public class ReservationService {
     private final ReservationRepo reservationRepo;
     private final CarRepo carRepo;
+    private final UserRepo userRepo;
 
     @Autowired
-    public ReservationService(ReservationRepo reservationRepo, CarRepo carRepo) {
+    public ReservationService(ReservationRepo reservationRepo, CarRepo carRepo, UserRepo userRepo) {
         this.reservationRepo = reservationRepo;
         this.carRepo = carRepo;
+        this.userRepo = userRepo;
     }
 
     public ResponseEntity<?> addReservation(Reservation reservation) {
-        reservationRepo.save(reservation);
-        return new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
+        if(carRepo.findCarByPlateId(reservation.getCar().getPlateId()).isPresent())
+        {
+            Optional<Car> car = carRepo.findCarByPlateId(reservation.getCar().getPlateId());
+            if(car.get().getStatus() == CarStatus.ACTIVE)
+            {
+                car.get().setStatus(CarStatus.RENTED);
+                reservationRepo.save(reservation);
+                return new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>("Car selected is unavailable for now", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>("No car with plate id " + reservation.getCar().getPlateId() + " was found", HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> findAllReservations() {
@@ -74,5 +89,19 @@ public class ReservationService {
             return new ResponseEntity<>(reservations, HttpStatus.OK);
         }
         return new ResponseEntity<>("No reservation for car with plate id " + car.getPlateId() + " was found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findReservationsByUserId(Long userId) {
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent())
+        {
+            Optional<List<Reservation>> reservations = reservationRepo.findReservationsByUser(user.get());
+            if(reservations.isPresent())
+            {
+                return new ResponseEntity<>(reservations, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("No reservations for user with id " + userId + " was found", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>("No user with id " + userId + " was found", HttpStatus.UNAUTHORIZED);
     }
 }

@@ -42,6 +42,11 @@ public class ReservationResource {
         return reservationService.findReservationsByStartDate(startDate);
     }
 
+    @GetMapping("/find/user/{userId}")
+    public ResponseEntity<?> getReservationsByUserId(@PathVariable("userId") Long userId) {
+        return reservationService.findReservationsByUserId(userId);
+    }
+
     @GetMapping("/find/car/{plateId}")
     public ResponseEntity<?> getReservationsByPlateId(@PathVariable("plateId") Long plateId) {
         if(carService.findCarByPlateId(plateId).getStatusCode() == HttpStatus.OK)
@@ -63,17 +68,7 @@ public class ReservationResource {
 
     @PostMapping("/add")
     public ResponseEntity<?> addReservation(@RequestBody Reservation reservation) {
-        if(carService.findCarByPlateId(reservation.getCar().getPlateId()).getStatusCode() == HttpStatus.OK)
-        {
-            Optional<Car> car = (Optional<Car>)carService.findCarByPlateId(reservation.getCar().getPlateId()).getBody();
-            if(car.get().getStatus() == CarStatus.ACTIVE)
-            {
-                car.get().setStatus(CarStatus.RENTED);
-                return reservationService.addReservation(reservation);
-            }
-            return new ResponseEntity<>("Car selected is unavailable for now", HttpStatus.CONFLICT);
-        }
-        return new ResponseEntity<>("No car with plate id " + reservation.getCar().getPlateId() + " was found", HttpStatus.NO_CONTENT);
+        return reservationService.addReservation(reservation);
     }
 
     @PutMapping("/update")

@@ -76,6 +76,11 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
         return carService.findCarsByRate(rate);
     }
 
+    @GetMapping("/find/rateBellow/{rate}")
+    public ResponseEntity<?> getCarsBellowRate(@PathVariable("rate") Float rate){
+        return carService.findCarsBellowRate(rate);
+    }
+
     @GetMapping("/find/status/{status}")
     public ResponseEntity<?> getCarsByStatus(@PathVariable("status") CarStatus status){
         return carService.findCarsByStatus(status);
@@ -107,5 +112,38 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
         return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
     }
 
+    @GetMapping("/find/brands")
+    public ResponseEntity<?> getBrands(){
+        return carService.findBrands();
+    }
 
+    @GetMapping("/find/types")
+    public ResponseEntity<?> getTypes(){
+        return carService.findTypes();
+    }
+
+    @GetMapping("/find/years")
+    public ResponseEntity<?> getYears(){
+        return carService.findYears();
+    }
+
+    @GetMapping("/find/transmissions")
+    public ResponseEntity<?> getTransmissions(){
+        return carService.findTransmissions();
+    }
+
+    @GetMapping("/find/fuels")
+    public ResponseEntity<?> getFuels(){
+        return carService.findFuels();
+    }
+
+    @GetMapping("/find/bodies")
+    public ResponseEntity<?> getBodyStyles(){
+        return carService.findBodyStyles();
+    }
+
+    @GetMapping("/find/colors")
+    public ResponseEntity<?> getColors(){
+        return carService.findColors();
+    }
 }

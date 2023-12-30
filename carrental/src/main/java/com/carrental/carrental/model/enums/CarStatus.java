@@ -1,8 +1,8 @@
 package com.carrental.carrental.model.enums;
 
 public enum CarStatus {
-    ACTIVE("AIRPORT"),
-    RENTED("DOWNTOWN"),
+    ACTIVE("ACTIVE"),
+    RENTED("RENTED"),
     OUTOFSERVICE("OUT OF SERVICE");
 
     private final String displayName;

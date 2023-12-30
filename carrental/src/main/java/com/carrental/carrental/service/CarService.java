@@ -60,6 +60,69 @@ public class CarService {
         return new ResponseEntity<>("No car with plate id " + car.getPlateId(), HttpStatus.NO_CONTENT);
     }
 
+    public ResponseEntity<?> findBrands() {
+        Optional<List<String>> brands = carRepo.findAllBrands();
+        if(brands.isPresent())
+        {
+            return new ResponseEntity<>(brands, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No brands found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findTypes() {
+        Optional<List<String>> types = carRepo.findAllCarTypes();
+        if(types.isPresent())
+        {
+            return new ResponseEntity<>(types, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No types found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findYears() {
+        Optional<List<String>> years = carRepo.findAllYears();
+        if(years.isPresent())
+        {
+            return new ResponseEntity<>(years, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No years found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findTransmissions() {
+        Optional<List<String>> transmissions = carRepo.findAllTransmissionTypes();
+        if(transmissions.isPresent())
+        {
+            return new ResponseEntity<>(transmissions, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No transmission types found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findFuels() {
+        Optional<List<String>> fuels = carRepo.findAllFuelTypes();
+        if(fuels.isPresent())
+        {
+            return new ResponseEntity<>(fuels, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No fuel types found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findBodyStyles() {
+        Optional<List<String>> styles = carRepo.findAllBodyStyles();
+        if(styles.isPresent())
+        {
+            return new ResponseEntity<>(styles, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No body styles found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findColors() {
+        Optional<List<String>> colors = carRepo.findAllColors();
+        if(colors.isPresent())
+        {
+            return new ResponseEntity<>(colors, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No colors found", HttpStatus.NO_CONTENT);
+    }
+
     @Transactional
     public void deleteCar(Long plateId){
         carRepo.deleteCarByPlateId(plateId);
@@ -143,7 +206,7 @@ public class CarService {
         {
             return new ResponseEntity<>(cars, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No car with " + capacity + " seats capacity was found", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("No car with " + capacity + " seats capacity was found", HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> findCarsByRate(Float rate) {
@@ -153,6 +216,15 @@ public class CarService {
             return new ResponseEntity<>(cars, HttpStatus.OK);
         }
         return new ResponseEntity<>("No car with " + rate + " $ rate was found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findCarsBellowRate(Float rate) {
+        Optional<List<Car>> cars = carRepo.findCarsBellowRate(rate);
+        if(cars.isPresent())
+        {
+            return new ResponseEntity<>(cars, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No car with " + rate + " $ rate was found", HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> findCarsByStatus(CarStatus status) {

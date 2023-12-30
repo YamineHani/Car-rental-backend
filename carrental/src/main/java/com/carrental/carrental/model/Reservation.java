@@ -39,9 +39,13 @@ public class Reservation implements Serializable {
     @OneToOne(mappedBy = "reservation")
     private Billing billing;
 
+    @ManyToOne()
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
+
     //TRY TO REMOVE ID
-    public Reservation(Integer reservationId, Date startDate, Integer days, Date endDate, Boolean driver, Car car, String license) {
-        this.reservationId = reservationId;
+    public Reservation(Date startDate, Integer days, Date endDate, Boolean driver, Car car, String license) {
+        //this.reservationId = reservationId;
         this.startDate = startDate;
         this.days = days;
         this.endDate = endDate;

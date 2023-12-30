@@ -14,6 +14,7 @@ import java.util.Optional;
 @Transactional(readOnly = true) //MIGHT REMOVE THIS
 public interface UserRepo extends JpaRepository<User,Long> {
     Optional<User> findByEmail(String email);
+    Optional<User> findById(Long id);
 
 
     @Transactional

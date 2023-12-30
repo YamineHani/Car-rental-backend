@@ -55,7 +55,7 @@ public class BillingResource {
     //todo messaging repeated reservation ids
     @PostMapping("/add")
     public ResponseEntity<?> addBilling(@RequestBody Billing billing){
-        if(reservationService.findReservationByReservationId(billing.getReservationId()).getStatusCode() == HttpStatus.OK)
+        if(reservationService.findReservationByReservationId(billing.getReservation().getReservationId()).getStatusCode() == HttpStatus.OK)
         {
             /*Optional<Reservation> reservationFound = (Optional<Reservation>)reservationService.findReservationByReservationId(billing.getReservationId()).getBody();
             Optional<Billing> billingFound = (Optional<Billing>)billingService.findBillingByReservation(reservationFound.get()).getBody();
@@ -65,7 +65,7 @@ public class BillingResource {
             }*/
             return billingService.addBilling(billing);
         }
-        return new ResponseEntity<>("No reservation with id " + billing.getReservationId() + " was found", HttpStatus.CONFLICT);
+        return new ResponseEntity<>("No reservation with id " + billing.getReservation().getReservationId() + " was found", HttpStatus.CONFLICT);
     }
 
     @PutMapping("/update")

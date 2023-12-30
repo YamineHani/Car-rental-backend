@@ -6,8 +6,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,6 +36,8 @@ public class User implements UserDetails {
     private UserRole userRole;
     private Boolean locked = false;
     private Boolean enabled = false; // will be enabled once user confirms email and account becomes active
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations = new ArrayList<Reservation>();
 
     //constructor without id because id is auto-generated
     public User(String firstName, String lastName,

@@ -37,4 +37,27 @@ public interface CarRepo extends JpaRepository<Car,Long> {
 
     Optional<List<Car>> findCarsByOffice(Office office);
 
+    @Query(value = "SELECT DISTINCT brand FROM car", nativeQuery = true)
+    Optional<List<String>> findAllBrands();
+
+    @Query(value = "SELECT DISTINCT type FROM car", nativeQuery = true)
+    Optional<List<String>> findAllCarTypes();
+
+    @Query(value = "SELECT DISTINCT year FROM car", nativeQuery = true)
+    Optional<List<String>> findAllYears();
+
+    @Query(value = "SELECT DISTINCT transmission_type FROM car", nativeQuery = true)
+    Optional<List<String>> findAllTransmissionTypes();
+
+    @Query(value = "SELECT DISTINCT fuel_type FROM car", nativeQuery = true)
+    Optional<List<String>> findAllFuelTypes();
+
+    @Query(value = "SELECT DISTINCT body_style FROM car", nativeQuery = true)
+    Optional<List<String>> findAllBodyStyles();
+
+    @Query(value = "SELECT DISTINCT color FROM car", nativeQuery = true)
+    Optional<List<String>> findAllColors();
+
+    @Query(value = "SELECT * FROM car WHERE rate <= ?1", nativeQuery = true)
+    Optional<List<Car>> findCarsBellowRate(Float rate);
 }
