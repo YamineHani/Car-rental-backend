@@ -97,7 +97,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateCar(@RequestBody Car car){
+    public ResponseEntity<String> updateCar(@RequestBody Car car){
         return carService.updateCar(car);
     }
 

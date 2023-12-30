@@ -50,7 +50,7 @@ public class CarService {
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> updateCar(Car car){
+    public ResponseEntity<String> updateCar(Car car){
         if(carRepo.existsById(car.getPlateId()))
         {
             if(officeRepo.existsById(car.getOffice().getOfficeId()))
@@ -58,9 +58,9 @@ public class CarService {
                 carRepo.save(car);
                 return new ResponseEntity<>("Successfully updated", HttpStatus.OK);
             }
-            return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>("No car with plate id " + car.getPlateId(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("No car with plate id " + car.getPlateId(), HttpStatus.UNAUTHORIZED);
     }
 
     @Transactional

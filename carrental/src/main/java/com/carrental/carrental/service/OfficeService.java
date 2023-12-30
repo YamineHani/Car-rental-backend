@@ -2,13 +2,11 @@ package com.carrental.carrental.service;
 
 import com.carrental.carrental.model.Office;
 import com.carrental.carrental.model.User;
-import com.carrental.carrental.model.UserRole;
+import com.carrental.carrental.model.enums.UserRole;
 import com.carrental.carrental.model.enums.Branch;
 import com.carrental.carrental.repo.OfficeRepo;
 import com.carrental.carrental.repo.UserRepo;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -1,6 +1,7 @@
 package com.carrental.carrental.service;
 
 import com.carrental.carrental.model.*;
+import com.carrental.carrental.model.enums.UserRole;
 import com.carrental.carrental.repo.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
