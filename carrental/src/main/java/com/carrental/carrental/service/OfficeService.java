@@ -6,6 +6,7 @@ import com.carrental.carrental.model.UserRole;
 import com.carrental.carrental.model.enums.Branch;
 import com.carrental.carrental.repo.OfficeRepo;
 import com.carrental.carrental.repo.UserRepo;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,6 +63,14 @@ public class OfficeService {
             return new ResponseEntity<>("No offices currently exist", HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(offices, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> findAllOfficeIds(){
+        Optional<List<Integer>> officesId = officeRepo.findAllOfficeIds();
+        if(officesId.isEmpty()){
+            return new ResponseEntity<>("No offices currently exist", HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(officesId,HttpStatus.OK);
     }
 
     public ResponseEntity<String> updateOffice(Office office) {

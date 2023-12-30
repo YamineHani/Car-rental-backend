@@ -15,6 +15,9 @@ public interface OfficeRepo extends JpaRepository<Office,Integer> {
     boolean existsByCityAndCountryAndBranch(String city, String country, Branch branch);
     Optional<List<Office>> findOfficesByCountry(String country);
 
+    @Query("SELECT o.officeId FROM Office o")
+    Optional<List<Integer>> findAllOfficeIds(); //to choose from in Add car
+
     void deleteOfficeByOfficeId(Integer officeId);
 
     Optional<Office> findOfficeByOfficeId(Integer id);

@@ -42,6 +42,11 @@ public class OfficeResource {
         return officeService.findOfficesByBranch(branch);
     }
 
+    @GetMapping("/find/All/OfficesId")
+    public ResponseEntity<?> getAllOfficesId(){
+        return officeService.findAllOfficeIds();
+    }
+
     /*@GetMapping("/find/cars/{officeId}")
     public ResponseEntity<List<Integer>> getOfficePlateIds(@PathVariable("officeId") Integer officeId) {
         List<Integer> cars = officeService.findOfficePlateIds(officeId);
