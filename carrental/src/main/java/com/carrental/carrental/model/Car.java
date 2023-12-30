@@ -25,6 +25,7 @@ public class Car implements Serializable {
     @Column(nullable = false)
     private Integer year;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private CarStatus status;
     @Column(nullable = false)
     private Float rate;
