@@ -27,7 +27,6 @@ public class UserController {
 
     @PostMapping(path = "login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
-
         return  userService.login(request);
     }
 }
