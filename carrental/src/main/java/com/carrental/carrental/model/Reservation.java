@@ -40,7 +40,8 @@ public class Reservation implements Serializable {
     private Billing billing;
 
     //TRY TO REMOVE ID
-    public Reservation(Integer reservationId, Date startDate, Integer days, Date endDate, Boolean driver, Car car, String license) {
+    public Reservation(Integer reservationId, Date startDate, Integer days,
+                       Date endDate, Boolean driver, Car car, String license) {
         this.reservationId = reservationId;
         this.startDate = startDate;
         this.days = days;
