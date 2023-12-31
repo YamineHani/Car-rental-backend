@@ -1,13 +1,17 @@
 package com.carrental.carrental.model;
 
+import com.carrental.carrental.model.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +36,11 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+
+    @OneToMany(mappedBy = "user")//-------------------
+    @JsonIgnore
+    private List<Reservation> reservations = new ArrayList<Reservation>();
+    //-------------------------
     private Boolean locked = false;
     private Boolean enabled = false; // will be enabled once user confirms email and account becomes active
 

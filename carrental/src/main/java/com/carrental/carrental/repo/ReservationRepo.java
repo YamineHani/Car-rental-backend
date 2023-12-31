@@ -15,11 +15,11 @@ public interface ReservationRepo extends JpaRepository<Reservation, Integer> {
 
     Optional<Reservation> findReservationByReservationId(Integer id);
 
-    Optional<List<Reservation>> findReservationsByStartDate(Date startDate);
+   // Optional<List<Reservation>> findReservationsByStartDate(Date startDate);
 
     void deleteReservationByReservationId(Integer reservationId);
 
-    Optional<List<Reservation>> findReservationsByCar(Car car);
+    List<Reservation> findReservationsByCar(Car car);
 
     /*@Query(value = "SELECT * FROM reservation WHERE plate_id IN (SELECT plate_id FROM car WHERE office_id = :officeId", nativeQuery = true)
     Optional<List<Reservation>> findReservationsByOfficeId(@Param("officeId") Integer officeId);*/

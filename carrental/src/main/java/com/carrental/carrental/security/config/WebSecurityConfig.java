@@ -30,18 +30,15 @@ public class WebSecurityConfig {
     }
     // TODO FIND HOW TO SHOW EXCEPTIONS AS IT IS NOT WORKING
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-//        return authConfig.getAuthenticationManager();
-//    }
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v*/**").permitAll()
-                                .anyRequest().authenticated()
+//                        auth.requestMatchers("/api/v*/**").permitAll()
+//                                .anyRequest().authenticated()
+                        auth.anyRequest().permitAll()
                 );
         // TODO MAKE SURE LOGIN WORKS LIKE THIS THEN ADD LOGOUT
         return http.build();
