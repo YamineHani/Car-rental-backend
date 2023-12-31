@@ -5,6 +5,7 @@ import com.carrental.carrental.model.enums.CarStatus;
 import com.carrental.carrental.model.enums.FuelType;
 import com.carrental.carrental.model.enums.TransmissionType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +49,7 @@ public class Car implements Serializable {
     private String imageUrl;
 
     @OneToMany(mappedBy = "car")
+    @JsonIgnore
     private List<Reservation> reservations = new ArrayList<Reservation>();
     @ManyToOne()
     @JoinColumn(name = "officeId", nullable = false)
