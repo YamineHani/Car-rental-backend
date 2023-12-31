@@ -123,6 +123,16 @@ public class CarService {
         return new ResponseEntity<>("No colors found", HttpStatus.NO_CONTENT);
     }
 
+    public ResponseEntity<?> findMaxRate() {
+        Optional<Float> maxRate = carRepo.findMaxRate();
+        if(maxRate.isPresent())
+        {
+            System.out.println(maxRate.toString());
+            return new ResponseEntity<>(maxRate, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No colors found", HttpStatus.NO_CONTENT);
+    }
+
     @Transactional
     public void deleteCar(Long plateId){
         carRepo.deleteCarByPlateId(plateId);

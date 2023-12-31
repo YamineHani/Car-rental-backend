@@ -146,4 +146,9 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     public ResponseEntity<?> getColors(){
         return carService.findColors();
     }
+
+    @GetMapping("/find/maxRate")
+    public ResponseEntity<?> getMaxRate(){
+        return carService.findMaxRate();
+    }
 }

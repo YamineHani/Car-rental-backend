@@ -58,6 +58,9 @@ public interface CarRepo extends JpaRepository<Car,Long> {
     @Query(value = "SELECT DISTINCT color FROM car", nativeQuery = true)
     Optional<List<String>> findAllColors();
 
+    @Query(value = "SELECT MAX(rate) color FROM car", nativeQuery = true)
+    Optional<Float> findMaxRate();
+
     @Query(value = "SELECT * FROM car WHERE rate <= ?1", nativeQuery = true)
     Optional<List<Car>> findCarsBellowRate(Float rate);
 }
