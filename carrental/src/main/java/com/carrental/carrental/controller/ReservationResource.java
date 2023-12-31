@@ -1,18 +1,11 @@
 package com.carrental.carrental.controller;
 
-import com.carrental.carrental.model.Car;
 import com.carrental.carrental.model.Reservation;
-import com.carrental.carrental.model.enums.CarStatus;
-import com.carrental.carrental.service.BillingService;
 import com.carrental.carrental.service.CarService;
 import com.carrental.carrental.service.ReservationService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Date;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/reservations")
