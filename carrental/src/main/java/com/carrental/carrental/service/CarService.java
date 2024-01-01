@@ -151,12 +151,16 @@ public class CarService {
         return new ResponseEntity<>("No " + status.getDisplayName() + " car was found", HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<?> findCarsByOffice(Office office) {
-        Optional<List<Car>> cars = carRepo.findCarsByOffice(office);
-        if (cars.isPresent()) {
-            return new ResponseEntity<>(cars, HttpStatus.OK);
+    public ResponseEntity<?> findCarsByOffice(String officeEmail) {
+        Optional<Office> office = officeRepo.findOfficeByEmail(officeEmail);
+        if(office.isPresent()) {
+            Optional<List<Car>> cars = carRepo.findCarsByOffice(office.get());
+            if (cars.isPresent()) {
+                return new ResponseEntity<>(cars, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("No car registered for office with id " + office.get().getOfficeId() + " was found", HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>("No car registered for office with id " + office.getOfficeId() + " was found", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("No office with email " + office.get().getEmail() + " was found", HttpStatus.NO_CONTENT);
     }
 
     // Office
@@ -280,10 +284,10 @@ public class CarService {
         return new ResponseEntity<>("No office with email " + office.get().getEmail() + " was found", HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<?> findCarByPlateIdInOffice(Long plateId, String officeEmail) {
+    public ResponseEntity<?> findCarByPlateIdInOffice(long plateId, String officeEmail) {
         Optional<Office> office = officeRepo.findOfficeByEmail(officeEmail);
         if (office.isPresent()) {
-            Optional<Car> car = carRepo.findCarByPlateIdInOffice(plateId, office.get().getOfficeId());
+            Optional<List<Car>> car = carRepo.findCarByPlateIdInOffice(plateId, office.get().getOfficeId());  //added for frontend searching purpose
             if (car.isPresent()) {
                 return new ResponseEntity<>(car, HttpStatus.OK);
             }
@@ -373,8 +377,17 @@ public class CarService {
         return new ResponseEntity<>("No active car matching", HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<?> findActiveCarByPlateId(Long plateId) {
-        Optional<Car> car = carRepo.findActiveCarByPlateId(plateId);
+    public ResponseEntity<?> findActiveCarByPlateId(long plateId) {
+        Optional<List<Car>> car = carRepo.findActiveCarByPlateId(plateId);   //added for frontend searching purpose
+        if (car.isPresent()) {
+            return new ResponseEntity<>(car, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No active car matching", HttpStatus.NO_CONTENT);
+    }
+
+    //added for frontend searching purpose
+    public ResponseEntity<?> findCarByPlateIdFront(long plateId) {
+        Optional<List<Car>> car = carRepo.findCarByPlateIdFront(plateId);
         if (car.isPresent()) {
             return new ResponseEntity<>(car, HttpStatus.OK);
         }

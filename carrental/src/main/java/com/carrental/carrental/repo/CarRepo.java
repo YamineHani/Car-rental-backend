@@ -5,7 +5,6 @@ import com.carrental.carrental.model.Office;
 import com.carrental.carrental.model.enums.CarStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -69,7 +68,7 @@ public interface CarRepo extends JpaRepository<Car,Long> {
     Optional<List<Car>> findCarsByYearInOffice(Integer year, Integer officeId);
 
     @Query(value = "SELECT * FROM car where plate_id = ?1 AND office_id = ?2", nativeQuery = true)
-    Optional<Car> findCarByPlateIdInOffice(Long plateId, Integer officeId);
+    Optional<List<Car>> findCarByPlateIdInOffice(Long plateId, Integer officeId);
 
     //Active
     @Query(value = "SELECT * FROM car where brand LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
@@ -103,6 +102,10 @@ public interface CarRepo extends JpaRepository<Car,Long> {
     Optional<List<Car>> findActiveCarsByYear(Integer year);
 
     @Query(value = "SELECT * FROM car where plate_id = ?1 AND status = 'ACTIVE'", nativeQuery = true)
-    Optional<Car> findActiveCarByPlateId(Long plateId);
+    Optional<List<Car>> findActiveCarByPlateId(Long plateId);
+
+    //added for frontend searching purpose
+    @Query(value = "SELECT * FROM car where plate_id = ?1", nativeQuery = true)
+    Optional<List<Car>> findCarByPlateIdFront(Long plateId);
 
 }

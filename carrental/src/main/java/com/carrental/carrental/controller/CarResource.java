@@ -28,7 +28,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     //api/car/find/500
     @GetMapping("/find/plate/{plateId}")
     public ResponseEntity<?> getCarByPlateId(@PathVariable("plateId") Long plateId){
-        return carService.findCarByPlateId(plateId);
+        return carService.findCarByPlateIdFront(plateId);  //added for frontend searching purpose
     }
 
     @GetMapping("/find/brand/{brand}")
@@ -81,14 +81,9 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
         return carService.findCarsByStatus(status);
     }
 
-    @GetMapping("/find/office/{officeId}")
-    public ResponseEntity<?> getCarsByOfficeId(@PathVariable("officeId") Integer officeId){
-        if(officeService.findOfficeByOfficeId(officeId).getStatusCode() == HttpStatus.OK)
-        {
-            Optional<Office> office = (Optional<Office>)officeService.findOfficeByOfficeId(officeId).getBody();
-            return carService.findCarsByOffice(office.get());
-        }
-        return new ResponseEntity<>("No office with id " + officeId, HttpStatus.NO_CONTENT);
+    @GetMapping("/find/office/{officeEmail}")
+    public ResponseEntity<?> getCarsByOfficeId(@PathVariable("officeEmail") String officeEmail){
+        return carService.findCarsByOffice(officeEmail);
     }
 
     @PostMapping("/add")
@@ -158,7 +153,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     }
 
     @GetMapping("/find/inOffice/{officeEmail}/plate/{value}")
-    public ResponseEntity<?> getCarByPlateIdInOffice(@PathVariable("officeEmail") String officeEmail, @PathVariable("value") Long value) {
+    public ResponseEntity<?> getCarByPlateIdInOffice(@PathVariable("officeEmail") String officeEmail, @PathVariable("value") long value) {
         return carService.findCarByPlateIdInOffice(value, officeEmail);
     }
 
@@ -213,7 +208,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     }
 
     @GetMapping("/find/active/plate/{value}")
-    public ResponseEntity<?> getActiveCarByPlate(@PathVariable("value") Long value) {
+    public ResponseEntity<?> getActiveCarByPlate(@PathVariable("value") long value) {
         return carService.findActiveCarByPlateId(value);
     }
 
