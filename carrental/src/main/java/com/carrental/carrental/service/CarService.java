@@ -143,12 +143,12 @@ public class CarService {
         return new ResponseEntity<>("No car with " + rate + " $ rate was found", HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<?> findCarsByStatus(CarStatus status) {
+    public ResponseEntity<?> findCarsByStatus(String status) {
         Optional<List<Car>> cars = carRepo.findCarsByStatus(status);
         if (cars.isPresent()) {
             return new ResponseEntity<>(cars, HttpStatus.OK);
         }
-        return new ResponseEntity<>("No " + status.getDisplayName() + " car was found", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("No " + status + " car was found", HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> findCarsByOffice(String officeEmail) {

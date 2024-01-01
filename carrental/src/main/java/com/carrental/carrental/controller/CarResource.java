@@ -77,7 +77,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     }
 
     @GetMapping("/find/status/{status}")
-    public ResponseEntity<?> getCarsByStatus(@PathVariable("status") CarStatus status){
+    public ResponseEntity<?> getCarsByStatus(@PathVariable("status") String status){
         return carService.findCarsByStatus(status);
     }
 

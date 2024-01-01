@@ -43,7 +43,7 @@ public interface CarRepo extends JpaRepository<Car,Long> {
     Optional<List<Car>> findCarsByRate(Float rate);
 
     @Query(value = "SELECT * FROM car WHERE status  LIKE ?1%", nativeQuery = true)
-    Optional<List<Car>> findCarsByStatus(CarStatus status);
+    Optional<List<Car>> findCarsByStatus(String status);
 
     Optional<List<Car>> findCarsByOffice(Office office);
 
