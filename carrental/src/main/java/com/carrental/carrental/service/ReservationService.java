@@ -1,8 +1,6 @@
 package com.carrental.carrental.service;
 
-import com.carrental.carrental.model.Car;
-import com.carrental.carrental.model.Reservation;
-import com.carrental.carrental.model.User;
+import com.carrental.carrental.model.*;
 import com.carrental.carrental.model.enums.CarStatus;
 import com.carrental.carrental.repo.CarRepo;
 import com.carrental.carrental.repo.ReservationRepo;
@@ -12,7 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,8 +55,48 @@ public class ReservationService {
                 + " was found", HttpStatus.UNAUTHORIZED);
     }
 
+    public ResponseEntity<?> findReservations(ReservationRequest reservationRequest){
+        if (reservationRequest.getEmail() != null) {
+            List<Object[]> reservations = reservationRepo.
+                    findReservationsForCustomerWithDetails(reservationRequest.getEmail());
+            if(reservations.isEmpty()){
+                return new ResponseEntity<>("No reservations for "+
+                        reservationRequest.getEmail(),
+                        HttpStatus.NOT_FOUND );
+            }
+            return new ResponseEntity<>(reservations, HttpStatus.OK);
+        } else if (reservationRequest.getStartDate() != null && reservationRequest.getPlateId() != null) {
+            Optional<Car> optionalCar = carRepo.findCarByPlateId(reservationRequest.getPlateId());
+            if(optionalCar.isPresent()){
+                Car car = optionalCar.get();
+                List<Object[]> reservations = reservationRepo.
+                        findReservationsForCarInDateRange(car.getPlateId(), reservationRequest.getStartDate(),
+                                reservationRequest.getEndDate());
+                if(reservations.isEmpty()){
+                    return new ResponseEntity<>("No reservations between "+
+                            reservationRequest.getStartDate()+" and "+reservationRequest.getEndDate(),
+                            HttpStatus.NOT_FOUND );
+                }
+                return new ResponseEntity<>(reservations, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>("No car wih plate id "+
+                        reservationRequest.getPlateId(), HttpStatus.NOT_FOUND);
+            }
+        } else {
+            List<Object[]> reservations = reservationRepo.findReservationsByDateRange
+                    (reservationRequest.getStartDate(), reservationRequest.getEndDate());
+            if(reservations.isEmpty()){
+                return new ResponseEntity<String>("No reservations between "+
+                        reservationRequest.getStartDate()+" and "+reservationRequest.getEndDate(),
+                        HttpStatus.NOT_FOUND );
+            }
+            return new ResponseEntity<>(reservations, HttpStatus.OK);
+        }
+    }
+
     public ResponseEntity<?> findAllReservations() {
-        List<Reservation> reservations = reservationRepo.findAll();
+        List<Object[]> reservations = reservationRepo.findAllReservations();
         if(reservations.isEmpty())
         {
             return new ResponseEntity<>("No reservations currently exist", HttpStatus.UNAUTHORIZED);

@@ -1,15 +1,10 @@
 package com.carrental.carrental.model;
 
 import com.carrental.carrental.model.enums.BillingStatus;
-import com.carrental.carrental.model.enums.Method;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Reference;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.io.Serializable;
 import java.time.Duration;
