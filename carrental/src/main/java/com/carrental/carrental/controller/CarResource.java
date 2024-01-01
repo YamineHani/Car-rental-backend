@@ -77,7 +77,7 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
     }
 
     @GetMapping("/find/status/{status}")
-    public ResponseEntity<?> getCarsByStatus(@PathVariable("status") CarStatus status){
+    public ResponseEntity<?> getCarsByStatus(@PathVariable("status") String status){
         return carService.findCarsByStatus(status);
     }
 
@@ -182,10 +182,11 @@ public class CarResource { // This is a mirroring of whatever we have in the ser
         return carService.findActiveCarsByFuelType(value);
     }
 
-    @GetMapping("/find/active/status/{value}")
+    //Useless
+    /*@GetMapping("/find/active/status/{value}")
     public ResponseEntity<?> getActiveCarsByStatus(@PathVariable("value") String value) {
         return carService.findActiveCarsByStatus(value);
-    }
+    }*/
 
     @GetMapping("/find/active/transmission/{value}")
     public ResponseEntity<?> getActiveCarsByTransmission(@PathVariable("value") String value) {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -133,5 +134,41 @@ public class UserService implements UserDetailsService {
 
     public void deleteUser (String email){
         userRepo.deleteUserByEmail(email);
+    }
+
+    public ResponseEntity<?> findUsersByName(String name) {
+        Optional<List<User>> users = userRepo.findUsersByName(name);
+        if(users.isPresent())
+        {
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No users with name " + name + " was found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findUsersById(Integer id) {
+        Optional<List<User>> users = userRepo.findUserById(id);
+        if(users.isPresent())
+        {
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No users with id " + id + " was found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findUsersByEmail(String email) {
+        Optional<List<User>> users = userRepo.findUserByEmail(email);
+        if(users.isPresent())
+        {
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No users with email " + email + " was found", HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<?> findAllUsers() {
+        Optional<List<User>> users = userRepo.findAllUsers();
+        if(users.isPresent())
+        {
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No users found", HttpStatus.NO_CONTENT);
     }
 }

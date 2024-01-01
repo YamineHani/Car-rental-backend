@@ -2,6 +2,7 @@ package com.carrental.carrental.controller;
 
 import com.carrental.carrental.model.LoginRequest;
 import com.carrental.carrental.model.RegistrationRequest;
+import com.carrental.carrental.model.Reservation;
 import com.carrental.carrental.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,25 @@ public class UserController {
     @PostMapping(path = "login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
         return  userService.login(request);
+    }
+
+    @GetMapping(path = "/find/name/{name}")
+    public ResponseEntity<?> getUsersByName(@PathVariable("name") String name) {
+        return userService.findUsersByName(name);
+    }
+
+    @GetMapping(path = "/find/id/{id}")
+    public ResponseEntity<?> getUsersById(@PathVariable("id") Integer id) {
+        return userService.findUsersById(id);
+    }
+
+    @GetMapping(path = "/find/email/{email}")
+    public ResponseEntity<?> getUsersByEmail(@PathVariable("email") String email) {
+        return userService.findUsersByEmail(email);
+    }
+
+    @GetMapping(path = "/find/all")
+    public ResponseEntity<?> getAllUsers() {
+        return userService.findAllUsers();
     }
 }
