@@ -337,13 +337,14 @@ public class CarService {
         return new ResponseEntity<>("No active car matching", HttpStatus.NO_CONTENT);
         }
 
-    public ResponseEntity<?> findActiveCarsByStatus(String status) {
-        Optional<List<Car>> cars = carRepo.findActiveCarsByStatus(status);
-            if (cars.isPresent()) {
-                return new ResponseEntity<>(cars, HttpStatus.OK);
-            }
-        return new ResponseEntity<>("No active car matching", HttpStatus.NO_CONTENT);
+    //Useless
+    /*public ResponseEntity<?> findActiveCarsByStatus(String status) {
+    Optional<List<Car>> cars = carRepo.findActiveCarsByStatus(status);
+        if (cars.isPresent()) {
+            return new ResponseEntity<>(cars, HttpStatus.OK);
         }
+    return new ResponseEntity<>("No active car matching", HttpStatus.NO_CONTENT);
+    }*/
 
     public ResponseEntity<?> findActiveCarsByTransmissionType(String transmissionType) {
         Optional<List<Car>> cars = carRepo.findActiveCarsByTransmissionType(transmissionType);

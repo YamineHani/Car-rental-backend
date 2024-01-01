@@ -97,8 +97,9 @@ public interface CarRepo extends JpaRepository<Car,Long> {
     @Query(value = "SELECT * FROM car where fuel_type LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
     Optional<List<Car>> findActiveCarsByFuelType(String fuelType);
 
-    @Query(value = "SELECT * FROM car where status LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
-    Optional<List<Car>> findActiveCarsByStatus(String status);
+    //Useless
+    /*@Query(value = "SELECT * FROM car where status LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByStatus(String status);*/
 
     @Query(value = "SELECT * FROM car where transmission_type LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
     Optional<List<Car>> findActiveCarsByTransmissionType(String transmissionType);
