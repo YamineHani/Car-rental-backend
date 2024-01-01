@@ -47,4 +47,9 @@ public class ReservationResource {
     public ResponseEntity<String> deleteReservation(@PathVariable("reservationId") Integer reservationId) {
         return reservationService.deleteReservation(reservationId);
     }
+
+    @PostMapping("payments")
+    public ResponseEntity<?> findAllPayments(@RequestBody ReservationRequest reservationRequest){
+        return reservationService.findAllPayments(reservationRequest);
+    }
 }

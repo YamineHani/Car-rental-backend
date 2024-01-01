@@ -44,4 +44,11 @@ public interface ReservationRepo extends JpaRepository<Reservation, Integer> {
             "JOIN car c on r.plate_id = c.plate_id " +
             "JOIN User u ON r.id = u.id ", nativeQuery = true)
     List<Object[]> findAllReservations();
+
+    @Query(value = "SELECT CAST(r.start_date AS DATE), SUM(ABS(DATEDIFF(r.end_date, r.start_date)) * c.rate) AS payment" +
+            " FROM reservation r " +
+            "JOIN car c on r.plate_id = c.plate_id " +
+            "WHERE r.start_date >= ?1 AND r.start_date <= ?2 " +
+            "GROUP BY CAST(r.start_date AS DATE) ", nativeQuery = true)
+    List<Object[]> findPayments(Date startDate, Date endDate);
 }

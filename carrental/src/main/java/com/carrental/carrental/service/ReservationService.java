@@ -104,20 +104,6 @@ public class ReservationService {
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
-//    public ResponseEntity<String> updateReservation(Reservation reservation) { //not done
-//        Optional<Reservation> optionalReservation = reservationRepo.
-//                findReservationByReservationId(reservation.getReservationId());
-//        if(optionalReservation.isPresent()){
-//            Reservation newReservation = optionalReservation.get();
-//            Optional<Car> optionalCar = carRepo.findCarByPlateId(reservation.getCar().getPlateId());
-//            if(optionalCar.isPresent()){
-//                Car car = optionalCar.get();
-//            }
-//        }
-//        reservationRepo.save(reservation);
-//        return new ResponseEntity<>("Successfully updated", HttpStatus.OK);
-//    }
-
     @Transactional //will recheck this after deciding criteria for delete
     public ResponseEntity<String> deleteReservation(Integer reservationId) {
         if(reservationRepo.findReservationByReservationId(reservationId).isPresent()){
@@ -137,18 +123,6 @@ public class ReservationService {
         return new ResponseEntity<>("No reservation with id " + reservationId + " was found", HttpStatus.UNAUTHORIZED);
     }
 
-//    public ResponseEntity<?> findReservationsByStartDate(Date startDate) {
-//        Optional<List<Reservation>> optionalReservations = reservationRepo.findReservationsByStartDate(startDate);
-//        if(optionalReservations.isEmpty())
-//        {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .contentType(MediaType.TEXT_PLAIN)
-//                    .body("No reservation starting on " + startDate + " was found");
-//        }
-//        List<Reservation> reservations = optionalReservations.get();
-//        return new ResponseEntity<>(reservations, HttpStatus.OK);
-//    }
-
     public ResponseEntity<?> findReservationsByCar(Long plateId) {
         Optional<Car> optionalCar = carRepo.findCarByPlateId(plateId);
         if (optionalCar.isPresent()){
@@ -163,5 +137,14 @@ public class ReservationService {
         }
         return new ResponseEntity<>("No car with plate id " + plateId +
                 " was found", HttpStatus.UNAUTHORIZED);
+    }
+
+    public ResponseEntity<?> findAllPayments(ReservationRequest reservationRequest) {
+        List<Object[]> payments = reservationRepo.findPayments(reservationRequest.getStartDate(), reservationRequest.getEndDate());
+        if(payments.isEmpty())
+        {
+            return new ResponseEntity<>("No payment within period", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(payments, HttpStatus.OK);
     }
 }
