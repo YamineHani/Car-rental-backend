@@ -37,4 +37,72 @@ public interface CarRepo extends JpaRepository<Car,Long> {
 
     Optional<List<Car>> findCarsByOffice(Office office);
 
+    //Office
+    @Query(value = "SELECT * FROM car where brand LIKE ?1% AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByBrandInOffice(String brand, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where color LIKE ?1% AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByColorInOffice(String color, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where type LIKE ?1% AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByTypeInOffice(String type, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where body_style LIKE ?1% AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByBodyStyleInOffice(String bodyStyle, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where fuel_type LIKE ?1% AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByFuelTypeInOffice(String fuelType, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where status LIKE ?1% AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByStatusInOffice(String status, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where transmission_type LIKE ?1% AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByTransmissionTypeInOffice(String transmissionType, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where capacity = ?1 AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByCapacityInOffice(Integer capacity, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where rate <= ?1 AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsBellowRateInOffice(Float rate, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where year = ?1 AND office_id = ?2", nativeQuery = true)
+    Optional<List<Car>> findCarsByYearInOffice(Integer year, Integer officeId);
+
+    @Query(value = "SELECT * FROM car where plate_id = ?1 AND office_id = ?2", nativeQuery = true)
+    Optional<Car> findCarByPlateIdInOffice(Long plateId, Integer officeId);
+
+    //Active
+    @Query(value = "SELECT * FROM car where brand LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByBrand(String brand);
+
+    @Query(value = "SELECT * FROM car where color LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByColor(String color);
+
+    @Query(value = "SELECT * FROM car where type LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByType(String type);
+
+    @Query(value = "SELECT * FROM car where body_style LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByBodyStyle(String bodyStyle);
+
+    @Query(value = "SELECT * FROM car where fuel_type LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByFuelType(String fuelType);
+
+    @Query(value = "SELECT * FROM car where status LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByStatus(String status);
+
+    @Query(value = "SELECT * FROM car where transmission_type LIKE ?1% AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByTransmissionType(String transmissionType);
+
+    @Query(value = "SELECT * FROM car where capacity = ?1 AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByCapacity(Integer capacity);
+
+    @Query(value = "SELECT * FROM car where rate <= ?1 AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsBellowRate(Float rate);
+
+    @Query(value = "SELECT * FROM car where year = ?1 AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<List<Car>> findActiveCarsByYear(Integer year);
+
+    @Query(value = "SELECT * FROM car where plate_id = ?1 AND status = 'ACTIVE'", nativeQuery = true)
+    Optional<Car> findActiveCarByPlateId(Long plateId);
+
 }
