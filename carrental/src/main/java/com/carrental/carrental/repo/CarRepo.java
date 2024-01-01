@@ -12,26 +12,37 @@ import java.util.Optional;
 public interface CarRepo extends JpaRepository<Car,Long> {
     void deleteCarByPlateId(Long plateId);
 
+    @Query(value = "SELECT * FROM car WHERE plate_id = ?1", nativeQuery = true)
     Optional<Car> findCarByPlateId(Long plateId);
 
+    @Query(value = "SELECT * FROM car WHERE brand LIKE ?1%", nativeQuery = true)
     Optional<List<Car>> findCarsByBrand(String brand);
 
+    @Query(value = "SELECT * FROM car WHERE color LIKE ?1%", nativeQuery = true)
     Optional<List<Car>> findCarsByColor(String color);
 
+    @Query(value = "SELECT * FROM car WHERE year = ?1", nativeQuery = true)
     Optional<List<Car>> findCarsByYear(Integer year);
 
+    @Query(value = "SELECT * FROM car WHERE type LIKE ?1%", nativeQuery = true)
     Optional<List<Car>> findCarsByType(String type);
 
+    @Query(value = "SELECT * FROM car WHERE transmission_type LIKE ?1%", nativeQuery = true)
     Optional<List<Car>> findCarsByTransmissionType(String transmissionType);
 
+    @Query(value = "SELECT * FROM car WHERE fuel_type LIKE ?1%", nativeQuery = true)
     Optional<List<Car>> findCarsByFuelType(String fuelType);
 
+    @Query(value = "SELECT * FROM car WHERE body_style LIKE ?1%", nativeQuery = true)
     Optional<List<Car>> findCarsByBodyStyle(String bodyStyle);
 
+    @Query(value = "SELECT * FROM car WHERE capacity = ?1", nativeQuery = true)
     Optional<List<Car>> findCarsByCapacity(Integer capacity);
 
+    @Query(value = "SELECT * FROM car WHERE rate <= ?1", nativeQuery = true)
     Optional<List<Car>> findCarsByRate(Float rate);
 
+    @Query(value = "SELECT * FROM car WHERE status  LIKE ?1%", nativeQuery = true)
     Optional<List<Car>> findCarsByStatus(CarStatus status);
 
     Optional<List<Car>> findCarsByOffice(Office office);
