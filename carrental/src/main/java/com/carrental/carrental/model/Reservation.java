@@ -37,14 +37,8 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private Date startDate;
 
-//    @Transient //derived attribute
-//    private Integer lateDays;
-
     @Column(nullable = false)
     private Date endDate; //user has to enter endDate
-
-    //might remove
-    //private Date returnDate; //return date is the date in which the user actually return the car
 
     @ManyToOne()
     @JoinColumn(name = "plateId", nullable = false)
@@ -55,21 +49,18 @@ public class Reservation implements Serializable {
     private User user;
     //-------------------------------
 
-    //instead of table billing
     @Column(nullable = false)
-    private Method method;
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BillingStatus status;
 
     @Transient
     private float bill;
 
-    public Reservation( Date startDate, Date endDate, Car car, User user, Method method) {
+    public Reservation( Date startDate, Date endDate, Car car, User user) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.car = car;
         this.user = user;
-        this.method = method;
         this.status = BillingStatus.PENDING; //initially pending might remove this
     }
 
@@ -82,7 +73,6 @@ public class Reservation implements Serializable {
                 ", startDate="+startDate+
                 ", endDate="+endDate+
                 ", car_plate_id="+this.car.getPlateId()+
-                ", method=" + method +
                 ", status=" + status +
                 "}";
     }

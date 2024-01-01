@@ -41,7 +41,7 @@ public class ReservationService {
                 if(car.getStatus() == CarStatus.ACTIVE){
                     car.setStatus(CarStatus.RENTED);
                     Reservation newReservation = new Reservation(reservation.getStartDate(),
-                            reservation.getEndDate(), car, user, reservation.getMethod());
+                            reservation.getEndDate(), car, user);
                     newReservation.calculateBill(car);
                     reservationRepo.save(newReservation);
                     return new ResponseEntity<>("Successfully reserved", HttpStatus.OK);
