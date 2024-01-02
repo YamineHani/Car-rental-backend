@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +20,14 @@ public class CarService {
     private final CarRepo carRepo;
     private final OfficeRepo officeRepo;
 
+    private final StatusLogService statusLogService;
+
     @Autowired
-    public CarService(CarRepo carRepo, OfficeRepo officeRepo) {
+    public CarService(CarRepo carRepo, OfficeRepo officeRepo,
+                      StatusLogService statusLogService) {
         this.carRepo = carRepo;
         this.officeRepo = officeRepo;
+        this.statusLogService = statusLogService;
     }
 
     public ResponseEntity<String> addCar(Car car) { //edit save part
@@ -32,6 +37,7 @@ public class CarService {
                         car.getStatus(), car.getRate(), car.getTransmissionType(), car.getFuelType(),
                         car.getBodyStyle(), car.getColor(), car.getCapacity(), car.getImageUrl(), car.getOffice());
                 carRepo.save(newCar);
+                statusLogService.insert(new Date(), car, car.getStatus());
                 return new ResponseEntity<>("Successfully added", HttpStatus.CREATED);
             }
             return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.UNAUTHORIZED);
@@ -51,6 +57,7 @@ public class CarService {
         if (carRepo.existsById(car.getPlateId())) {
             if (officeRepo.existsById(car.getOffice().getOfficeId())) {
                 carRepo.save(car);
+                statusLogService.insert(new Date(), car, car.getStatus());
                 return new ResponseEntity<>("Successfully updated", HttpStatus.OK);
             }
             return new ResponseEntity<>("No office with id " + car.getOffice().getOfficeId(), HttpStatus.UNAUTHORIZED);

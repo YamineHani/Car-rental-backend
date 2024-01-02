@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,12 +20,15 @@ public class ReservationService {
     private final CarRepo carRepo;
     private final UserRepo userRepo;
 
+    private final StatusLogService statusLogService;
+
     @Autowired
     public ReservationService(ReservationRepo reservationRepo, CarRepo carRepo,
-                              UserRepo userRepo){
+                              UserRepo userRepo, StatusLogService statusLogService){
         this.reservationRepo = reservationRepo;
         this.carRepo = carRepo;
         this.userRepo = userRepo;
+        this.statusLogService = statusLogService;
     }
 
     @Transactional
@@ -41,8 +43,8 @@ public class ReservationService {
                     car.setStatus(CarStatus.RENTED);
                     Reservation newReservation = new Reservation(reservation.getStartDate(),
                             reservation.getEndDate(), car, user);
-                    newReservation.calculateBill(car);
                     reservationRepo.save(newReservation);
+                    statusLogService.insert(reservation.getStartDate(), car, car.getStatus());
                     return new ResponseEntity<>("Successfully reserved", HttpStatus.OK);
                 }
                 return new ResponseEntity<>("Car selected is unavailable for now",
