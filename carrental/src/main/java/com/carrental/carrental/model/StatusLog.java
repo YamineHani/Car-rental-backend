@@ -27,6 +27,7 @@ public class StatusLog implements Serializable {
     @JoinColumn(name = "plateId", nullable = false)
     private Car car;
 
+    @Enumerated(EnumType.STRING)
     private CarStatus status;
 
     public StatusLog(Date date, Car car, CarStatus status) {
